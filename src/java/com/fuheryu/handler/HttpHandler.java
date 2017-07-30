@@ -50,16 +50,21 @@ public class HttpHandler implements Handler {
                         buffer.clear();
                     }
 
+                    // 这里如果是client端直接关闭，bos.size()长度会小于1
+                    if(bos.size() < 1) {
+
+                        sc.close();
+                        return;
+                    }
                     System.out.println(new String(bos.toByteArray()));
 
-
-                    selectionKey.selector().wakeup();
 
                     HTTPResponse response = new HTTPResponse();
                     response.setContent("hello".getBytes());
                     response.addDefaultHeaders();
 
                     response.send(sc);
+                    selectionKey.cancel();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -112,6 +117,7 @@ public class HttpHandler implements Handler {
                 writeLine("", channel);
 
                 channel.write(ByteBuffer.wrap(content));
+                channel.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
