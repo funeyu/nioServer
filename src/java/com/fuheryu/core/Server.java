@@ -2,11 +2,13 @@ package com.fuheryu.core;
 
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicBoolean;
 import com.fuheryu.handler.Handler;
+import com.fuheryu.handler.HttpHandler;
 
 /**
  * Created by fuheyu on 2017/7/29.
@@ -17,6 +19,7 @@ public class Server {
     private AtomicBoolean listenning = new AtomicBoolean(true);
     private Handler handler;
     private Session session;
+    private Selector selector;
 
     public static Server initServer(int port) {
         if(singleServer == null) {
@@ -59,6 +62,7 @@ public class Server {
                     }
 
                     if(key.isReadable() && key.isValid()) {
+                        key.cancel();
                         handler.onRead(key);
                     }
                 }
@@ -68,6 +72,11 @@ public class Server {
         }
     }
 
-    public void
+    public static void main(String[] arg) {
+        Server s = Server.initServer(8099);
+        s.setHandler(HttpHandler.createHander());
+
+        s.start();
+    }
 
 }
