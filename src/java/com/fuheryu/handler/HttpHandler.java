@@ -2,7 +2,6 @@ package com.fuheryu.handler;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.HttpRetryException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.channels.SelectionKey;
@@ -12,7 +11,6 @@ import java.nio.charset.CharsetEncoder;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
