@@ -122,7 +122,4 @@ public class HttpHandler implements Handler {
         }
     }
 
-    private static class HTTPRequest {
-
-    }
 }
