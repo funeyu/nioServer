@@ -10,13 +10,17 @@ import java.util.Map;
  */
 public class Parse {
 
-    public static HTTPContext parse(String rawString) {
+    public static String parse(String rawString) {
         BufferedReader reader = new BufferedReader(new StringReader(rawString));
 
         try {
             String methodInfo = reader.readLine();
             String[] methodUrl = methodAndUrl(methodInfo);
             System.out.println(methodUrl[0] + ":" + methodUrl[1]);
+
+            String result = Router.use(methodUrl[1]);
+
+            return result;
         } catch (IOException e) {
             e.printStackTrace();
         }

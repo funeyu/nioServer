@@ -5,11 +5,21 @@ package com.fuheryu.http;
  */
 public class HTTPResponse {
 
+    private String content;
     private HTTPResponse() {}
 
-    public HTTPResponse init () {
+    public static HTTPResponse init (String content) {
         HTTPResponse response = new HTTPResponse();
+        response.setContent(content);
 
         return response;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

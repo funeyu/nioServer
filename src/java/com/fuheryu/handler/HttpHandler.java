@@ -1,5 +1,7 @@
 package com.fuheryu.handler;
 
+import com.fuheryu.http.Parse;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -54,11 +56,13 @@ public class HttpHandler implements Handler {
                         sc.close();
                         return;
                     }
-                    System.out.println(new String(bos.toByteArray()));
 
+                    String byteString = new String(bos.toByteArray());
+
+                    String result = Parse.parse(byteString);
 
                     HTTPResponse response = new HTTPResponse();
-                    response.setContent("hello".getBytes());
+                    response.setContent(result.getBytes());
                     response.addDefaultHeaders();
 
                     response.send(sc);
