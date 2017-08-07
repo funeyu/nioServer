@@ -23,7 +23,7 @@ public class Parse {
             httpContext.setRequest(req);
 
             for(String tmString = reader.readLine(); tmString != null; tmString = reader.readLine()) {
-                if(tmString.indexOf("Cookies:") > -1) {
+                if(tmString.indexOf("Cookie:") > -1) {
                     cookies(tmString, httpContext);
                 }
                 else if(tmString.indexOf("User-Agent:") > -1) {
