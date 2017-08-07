@@ -1,5 +1,6 @@
 package com.fuheryu.handler;
 
+import com.fuheryu.http.HTTPContext;
 import com.fuheryu.http.Parse;
 
 import java.io.ByteArrayOutputStream;
@@ -58,8 +59,12 @@ public class HttpHandler implements Handler {
                     }
 
                     String byteString = new String(bos.toByteArray());
+                    HTTPContext httpContext = HTTPContext.init();
 
-                    String result = Parse.parse(byteString);
+                    Parse.parse(byteString, httpContext);
+                    System.out.println(byteString);
+
+                    String result = Parse.parse(byteString, httpContext);
 
                     HTTPResponse response = new HTTPResponse();
                     response.setContent(result.getBytes());

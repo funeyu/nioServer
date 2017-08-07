@@ -6,13 +6,18 @@ package com.fuheryu.http;
  */
 public class HTTPContext {
 
-    private HTTPRequest request;
+    private HTTPRequest req;
 
-    private HTTPResponse response;
+    private HTTPResponse res;
 
     private HTTPContext() {}
 
-    public HTTPContext init(HTTPRequest request, HTTPResponse response) {
+    public static HTTPContext init() {
+
+        return new HTTPContext();
+    }
+
+    public static HTTPContext init(HTTPRequest request, HTTPResponse response) {
         HTTPContext context = new HTTPContext();
         context.setRequest(request);
         context.setResponse(response);
@@ -21,18 +26,18 @@ public class HTTPContext {
     }
 
     public void setRequest(HTTPRequest request) {
-        this.request = request;
+        this.req = request;
     }
 
     public void setResponse(HTTPResponse response) {
-        this.response = response;
+        this.res = response;
     }
 
     public HTTPRequest getRequest() {
-        return request;
+        return req;
     }
 
     public HTTPResponse getResponse() {
-        return response;
+        return res;
     }
 }

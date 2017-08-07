@@ -15,7 +15,7 @@ public class HTTPRequest {
 
     private HTTPRequest(){}
 
-    public HTTPRequest init(String method, Map<String, String> params, String url) {
+    public static HTTPRequest init(String method, Map<String, String> params, String url) {
 
         HTTPRequest request = new HTTPRequest();
         request.setMethod(method);
@@ -61,6 +61,6 @@ public class HTTPRequest {
                 "accept-encoding: gzip, deflate\n" +
                 "Connection: keep-alive";
 
-        Parse.parse(test);
+        Parse.parse(test, null);
     }
 }

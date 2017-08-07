@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 /**
  * Created by fuheyu on 2017/8/6.
  */
-public class ControllerMethod {
+    public class ControllerMethod {
 
     private Method method;
 

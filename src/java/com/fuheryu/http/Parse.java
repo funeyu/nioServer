@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class Parse {
 
-    public static String parse(String rawString) {
+    public static HTTPContext parse(String rawString, HTTPContext httpContext) {
         BufferedReader reader = new BufferedReader(new StringReader(rawString));
 
         try {
@@ -18,9 +18,15 @@ public class Parse {
             String[] methodUrl = methodAndUrl(methodInfo);
             System.out.println(methodUrl[0] + ":" + methodUrl[1]);
 
-            String result = Router.use(methodUrl[1]);
+            HTTPRequest req = HTTPRequest.init(methodUrl[0], null, methodUrl[1]);
+            // 初始化一个res对象，并且将其content设置为null
+            HTTPResponse res = HTTPResponse.init(null);
 
-            return result;
+            httpContext.setResponse(res);
+            httpContext.setRequest(req);
+
+
+            return httpContext;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -28,10 +34,19 @@ public class Parse {
         return null;
     }
 
-    public static String[] methodAndUrl(String s) {
+    public static Cookie[] cookies(String s, HTTPContext httpContext) {
+
+
+        return null;
+    }
+
+    private static String[] methodAndUrl(String s) {
 
         String[] spliteds = s.split("\\s+");
 
+
         return new String[]{spliteds[0], spliteds[1]};
     }
+
+
 }
