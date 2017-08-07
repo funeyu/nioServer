@@ -3,6 +3,7 @@ package com.fuheryu.http;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -19,23 +20,20 @@ public class Parse {
             System.out.println(methodUrl[0] + ":" + methodUrl[1]);
 
             HTTPRequest req = HTTPRequest.init(methodUrl[0], null, methodUrl[1]);
-            // 初始化一个res对象，并且将其content设置为null
-            HTTPResponse res = HTTPResponse.init(null);
-
-            httpContext.setResponse(res);
             httpContext.setRequest(req);
 
-
+            for(String tmString = reader.readLine(); tmString != null; tmString = reader.readLine()) {
+                if(tmString.indexOf("Cookies:") > -1) {
+                    cookies(tmString, httpContext);
+                }
+                else if(tmString.indexOf("User-Agent:") > -1) {
+                    userAgent(tmString, httpContext);
+                }
+            }
             return httpContext;
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return null;
-    }
-
-    public static Cookie[] cookies(String s, HTTPContext httpContext) {
-
 
         return null;
     }
@@ -46,6 +44,28 @@ public class Parse {
 
 
         return new String[]{spliteds[0], spliteds[1]};
+    }
+
+    private static void cookies(String s, HTTPContext httpContext) {
+
+        Map<String, String> cookieMap = new HashMap<String, String>();
+        // cookie String 类似于：
+        // Cookie: charger.mt.open=wechatInfo.openId;
+        String[] cookiess = s.substring(s.indexOf(": ") + 2, s.length()).split("; ");
+
+        for(String c : cookiess) {
+            if(c.indexOf("=") > -1) {
+                String[] slices = c.split("=");
+                cookieMap.put(slices[0], slices[1].substring(0, slices[1].length() - 1));
+            }
+        }
+
+
+        httpContext.getRequest().setCookies(cookieMap);
+    }
+
+    private static void userAgent(String s, HTTPContext httpContext) {
+
     }
 
 

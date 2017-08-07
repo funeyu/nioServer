@@ -13,6 +13,8 @@ public class HTTPRequest {
 
     private Map<String, String>params;
 
+    private Map<String, String>cookies;
+
     private HTTPRequest(){}
 
     public static HTTPRequest init(String method, Map<String, String> params, String url) {
@@ -37,6 +39,8 @@ public class HTTPRequest {
         this.url = url;
     }
 
+    public void setCookies(Map<String, String> cookies) { this.cookies = cookies; }
+
     public String getMethod() {
         return method;
     }
@@ -49,18 +53,6 @@ public class HTTPRequest {
         return url;
     }
 
-    public static void main(String[] args) {
+    public Map<String, String> getCookies() { return cookies; }
 
-        String test = "GET / HTTP/1.1\n" +
-                "cache-control: no-cache\n" +
-                "Postman-Token: a8f61615-9ad0-4893-b844-2e295507df1a\n" +
-                "User-Agent: PostmanRuntime/3.0.11-hotfix.2\n" +
-                "Accept: */*\n" +
-                "Host: localhost:8099\n" +
-                "cookie: JSESSIONID=BD7E0D0385FA98D6BBF2BBC1F45F475C\n" +
-                "accept-encoding: gzip, deflate\n" +
-                "Connection: keep-alive";
-
-        Parse.parse(test, null);
-    }
 }

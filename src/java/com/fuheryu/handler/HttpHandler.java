@@ -1,7 +1,9 @@
 package com.fuheryu.handler;
 
+import com.alibaba.fastjson.JSON;
 import com.fuheryu.http.HTTPContext;
 import com.fuheryu.http.Parse;
+import com.fuheryu.http.Router;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -59,19 +61,15 @@ public class HttpHandler implements Handler {
                     }
 
                     String byteString = new String(bos.toByteArray());
-                    HTTPContext httpContext = HTTPContext.init();
+                    HTTPContext httpContext = HTTPContext.init(sc, selectionKey);
 
                     Parse.parse(byteString, httpContext);
-                    System.out.println(byteString);
 
-                    String result = Parse.parse(byteString, httpContext);
+                    byte[] results = Router.use(httpContext.getRequest().getUrl());
 
-                    HTTPResponse response = new HTTPResponse();
-                    response.setContent(result.getBytes());
-                    response.addDefaultHeaders();
 
-                    response.send(sc);
-                    selectionKey.cancel();
+                    httpContext.getResponse().setContent(JSON.toJSONString(httpContext.getRequest().getCookies()).getBytes());
+                    httpContext.getResponse().send();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -84,51 +82,6 @@ public class HttpHandler implements Handler {
     public static Handler createHander() {
         Handler h = new HttpHandler();
         return h;
-    }
-
-    private static class HTTPResponse {
-
-        private String version = "HTTP/1.1";
-        private int responseCode = 200;
-        private String responseReason = "ok";
-        private Map<String, String> headers = new LinkedHashMap<String, String>();
-        private byte[] content;
-
-        private HTTPResponse() {}
-
-        private void addDefaultHeaders() {
-
-            headers.put("Date", new Date().toString());
-            headers.put("Server", "NIO");
-            headers.put("connection", "close");
-            headers.put("Content-Length", Integer.toString(content.length));
-        }
-
-        private void writeLine(String line, SocketChannel channel) throws IOException {
-            channel.write(encoder.encode(CharBuffer.wrap(line + "\r\n")));
-        }
-
-        private void setContent(byte[] content) {
-
-            this.content = content;
-        }
-
-        private void send(SocketChannel channel) {
-
-            try {
-                writeLine(version + " " + responseCode + " " + responseReason, channel);
-
-                for(Map.Entry<String, String> header : headers.entrySet()) {
-                    writeLine(header.getKey() + ": " + header.getValue(), channel);
-                }
-                writeLine("", channel);
-
-                channel.write(ByteBuffer.wrap(content));
-                channel.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
 }

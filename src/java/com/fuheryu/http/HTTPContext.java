@@ -1,6 +1,9 @@
 package com.fuheryu.http;
 
 
+import java.nio.channels.SelectionKey;
+import java.nio.channels.SocketChannel;
+
 /**
  * Created by fuheyu on 2017/8/1.
  */
@@ -12,9 +15,11 @@ public class HTTPContext {
 
     private HTTPContext() {}
 
-    public static HTTPContext init() {
+    public static HTTPContext init(SocketChannel sc, SelectionKey sk) {
 
-        return new HTTPContext();
+        HTTPContext httpContext = new HTTPContext();
+        httpContext.res = HTTPResponse.init(sk, sc);
+        return httpContext;
     }
 
     public static HTTPContext init(HTTPRequest request, HTTPResponse response) {
