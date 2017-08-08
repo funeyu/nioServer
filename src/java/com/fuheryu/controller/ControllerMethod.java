@@ -1,5 +1,7 @@
 package com.fuheryu.controller;
 
+import com.fuheryu.http.HTTPContext;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -29,10 +31,10 @@ import java.lang.reflect.Method;
         return cm;
     }
 
-    public String callee() {
+    public String callee(HTTPContext httpContext) {
         String result = "";
         try {
-            result = (String) this.method.invoke(this.caller.newInstance());
+            result = (String) this.method.invoke(this.caller.newInstance(), httpContext);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {

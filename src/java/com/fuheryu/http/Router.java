@@ -32,14 +32,15 @@ public class Router {
         }
     }
 
-    public static byte[] use(String url) {
+    public static byte[] use(HTTPContext httpContext) {
+        String url = httpContext.getRequest().getUrl();
         ControllerMethod cm = routersMapping.get(url);
 
         if(cm == null) {
             return "error router".getBytes();
         }
 
-        return cm.callee().getBytes();
+        return cm.callee(httpContext).getBytes();
     }
 
 }

@@ -3,6 +3,8 @@ package com.fuheryu.http;
 
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by fuheyu on 2017/8/1.
@@ -12,6 +14,8 @@ public class HTTPContext {
     private HTTPRequest req;
 
     private HTTPResponse res;
+
+    private Map<String, Object> attributes = new HashMap<String, Object>();
 
     private HTTPContext() {}
 

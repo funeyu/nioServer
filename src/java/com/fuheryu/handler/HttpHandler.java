@@ -65,10 +65,10 @@ public class HttpHandler implements Handler {
 
                     Parse.parse(byteString, httpContext);
 
-                    byte[] results = Router.use(httpContext.getRequest().getUrl());
+                    byte[] results = Router.use(httpContext);
 
 
-                    httpContext.getResponse().setContent(JSON.toJSONString(httpContext.getRequest().getCookies()).getBytes());
+                    httpContext.getResponse().setContent(results);
                     httpContext.getResponse().send();
 
                 } catch (Exception e) {
