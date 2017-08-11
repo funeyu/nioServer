@@ -58,12 +58,22 @@ public class HTTPResponse {
         }
     }
 
+    public void sendJSON() {
+
+        addJSONHeader();
+        send();
+    }
+
     private void addDefaultHeaders() {
 
         headers.put("Date", new Date().toString());
         headers.put("Server", "NIO");
         headers.put("connection", "close");
         headers.put("Content-Length", Integer.toString(content.length));
+    }
+
+    private void addJSONHeader() {
+        headers.put("Content-Type", "application/json; charset=utf-8");
     }
 
     private void writeLine(String line) throws IOException {
