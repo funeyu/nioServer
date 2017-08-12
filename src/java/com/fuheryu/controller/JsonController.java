@@ -1,7 +1,7 @@
 package com.fuheryu.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.fuheryu.http.AnnotationFactory;
+import com.fuheryu.core.annotation.AnnotationFactory;
 import com.fuheryu.http.HTTPContext;
 
 import java.util.ArrayList;

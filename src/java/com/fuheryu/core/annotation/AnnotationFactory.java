@@ -1,4 +1,4 @@
-package com.fuheryu.http;
+package com.fuheryu.core.annotation;
 
 import java.lang.annotation.*;
 

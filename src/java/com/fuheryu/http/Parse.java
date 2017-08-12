@@ -21,6 +21,7 @@ public class Parse {
 
             HTTPRequest req = HTTPRequest.init(methodUrl[0], null, methodUrl[1]);
             httpContext.setRequest(req);
+            System.out.println("rawString::::" + rawString);
 
             for(String tmString = reader.readLine(); tmString != null; tmString = reader.readLine()) {
                 if(tmString.indexOf("Cookie:") > -1) {

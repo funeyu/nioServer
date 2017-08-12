@@ -1,8 +1,7 @@
 package com.fuheryu.http;
 
-import com.fuheryu.Utils;
+import com.fuheryu.core.Utils;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

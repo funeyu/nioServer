@@ -1,9 +1,9 @@
 package com.fuheryu.controller;
 
-import com.fuheryu.http.AnnotationFactory;
+import com.fuheryu.core.annotation.AnnotationFactory;
 import com.fuheryu.http.HTTPContext;
 import com.fuheryu.service.DemoService;
-import com.fuheryu.service.ServiceFactory;
+import com.fuheryu.core.ServiceFactory;
 
 /**
  * Created by fuheyu on 2017/8/6.
@@ -19,4 +19,9 @@ public class HelloController {
         return service.sayHello();
     }
 
+    @AnnotationFactory.RouterMapping(path="/newPost", method = "post")
+    public String createPost(HTTPContext httpContext) {
+
+        return "success";
+    }
 }

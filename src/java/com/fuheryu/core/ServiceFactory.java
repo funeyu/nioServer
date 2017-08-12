@@ -1,6 +1,4 @@
-package com.fuheryu.service;
-
-import com.fuheryu.Utils;
+package com.fuheryu.core;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
