@@ -1,4 +1,4 @@
-package com.fuheryu.http;
+package com.fuheryu.core.http;
 
 import com.fuheryu.core.Utils;
 
@@ -31,15 +31,15 @@ public class Router {
         }
     }
 
-    public static byte[] use(HTTPContext httpContext) {
-        String url = httpContext.getRequest().getUrl();
+    public static byte[] use(Context context) {
+        String url = context.getReq().getUrl();
         ControllerMethod cm = routersMapping.get(url);
 
         if(cm == null) {
             return "error router".getBytes();
         }
 
-        return cm.callee(httpContext).getBytes();
+        return cm.callee(context).getBytes();
     }
 
 }

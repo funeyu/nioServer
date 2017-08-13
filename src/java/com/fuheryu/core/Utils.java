@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -152,6 +153,25 @@ public class Utils {
 
         return null;
     }
+
+    /*
+        合并buffers
+     */
+    public static ByteBuffer concat(ArrayList<ByteBuffer> buffers) {
+        int capacity = 0;
+        for(ByteBuffer buffer : buffers) {
+            capacity += buffer.capacity();
+        }
+
+        ByteBuffer all = ByteBuffer.allocate(capacity);
+
+        for(ByteBuffer bb : buffers) {
+            all.put(bb);
+        }
+
+        return all;
+    }
+
 
 
 //    public static void main(String[] args) {

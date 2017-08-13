@@ -2,7 +2,7 @@ package com.fuheryu.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.fuheryu.core.annotation.AnnotationFactory;
-import com.fuheryu.http.HTTPContext;
+import com.fuheryu.core.http.Context;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 public class JsonController {
 
     @AnnotationFactory.RouterMapping(path="/helloJson", method = "get")
-    public String test(HTTPContext httpContext) {
+    public String test(Context context) {
 
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("name", "java");

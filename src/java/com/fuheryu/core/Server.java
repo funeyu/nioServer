@@ -7,8 +7,9 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicBoolean;
-import com.fuheryu.handler.Handler;
-import com.fuheryu.handler.HttpHandler;
+import com.fuheryu.core.handler.Handler;
+import com.fuheryu.core.handler.HttpHandler;
+import com.fuheryu.core.http.Session;
 
 /**
  * Created by fuheyu on 2017/7/29.
@@ -20,6 +21,7 @@ public class Server {
     private Handler handler;
     private Session session;
     private Selector selector;
+    private long connectionCount = 0;
 
     public static Server initServer(int port) {
         if(singleServer == null) {
@@ -56,6 +58,7 @@ public class Server {
 
                     if(key.isAcceptable()) {
                         ServerSocketChannel ssc = (ServerSocketChannel) key.channel();
+                        key.attach(connectionCount ++);
                         SocketChannel sc = ssc.accept();
                         sc.configureBlocking(false);
                         sc.register(session.getSelector(), SelectionKey.OP_READ);

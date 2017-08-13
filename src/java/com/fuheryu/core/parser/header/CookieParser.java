@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class CookieParser extends ParserBase{
 
     public CookieParser(ParserBase next) {
-        this.next = next;
+        super(next);
     }
 
     @Override

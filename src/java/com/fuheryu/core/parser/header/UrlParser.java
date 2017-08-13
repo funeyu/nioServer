@@ -7,6 +7,10 @@ import com.fuheryu.core.http.Context;
  */
 public class UrlParser extends ParserBase {
 
+    public UrlParser(ParserBase next) {
+        super(next);
+    }
+
     @Override
     public void parse(Context context, HeaderMap headerMap) {
         String url;
@@ -16,6 +20,8 @@ public class UrlParser extends ParserBase {
             context.getReq().setMethod(slices[0]);
             context.getReq().setUrl(slices[1]);
             context.getReq().setHttpVersion(slices[2]);
+
+            super.next(context, headerMap);
         }
     }
 }

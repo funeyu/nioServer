@@ -1,6 +1,6 @@
 package com.fuheryu.controller;
 
-import com.fuheryu.http.HTTPContext;
+import com.fuheryu.core.http.Context;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -31,7 +31,7 @@ import java.lang.reflect.Method;
         return cm;
     }
 
-    public String callee(HTTPContext httpContext) {
+    public String callee(Context httpContext) {
         String result = "";
         try {
             result = (String) this.method.invoke(this.caller.newInstance(), httpContext);

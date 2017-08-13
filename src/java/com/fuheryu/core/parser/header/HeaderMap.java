@@ -1,5 +1,6 @@
 package com.fuheryu.core.parser.header;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -38,12 +39,12 @@ public class HeaderMap extends HashMap<String, String>{
         }
     }
 
-    public HeaderMap fill (String[] lines) {
+    public HeaderMap fill (ArrayList<String> lines) {
 
-        dealWithFirstLine(lines[0]);
+        dealWithFirstLine(lines.remove(0));
 
-        for(int i = 1; i < lines.length; i ++) {
-            String[] splices = lines[i].split(": ");
+        for(String line : lines) {
+            String[] splices = line.split(": ");
             this.put(splices[0].toLowerCase(), splices[1].toLowerCase());
         }
 

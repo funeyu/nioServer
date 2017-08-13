@@ -1,7 +1,7 @@
 package com.fuheryu.controller;
 
 import com.fuheryu.core.annotation.AnnotationFactory;
-import com.fuheryu.http.HTTPContext;
+import com.fuheryu.core.http.Context;
 import com.fuheryu.service.DemoService;
 import com.fuheryu.core.ServiceFactory;
 
@@ -12,7 +12,7 @@ import com.fuheryu.core.ServiceFactory;
 public class HelloController {
 
     @AnnotationFactory.RouterMapping(path="/hello", method = "get")
-    public String sayHello(HTTPContext httpContext) {
+    public String sayHello(Context context) {
 
         DemoService service = (DemoService) ServiceFactory.one(DemoService.class);
 
@@ -20,7 +20,7 @@ public class HelloController {
     }
 
     @AnnotationFactory.RouterMapping(path="/newPost", method = "post")
-    public String createPost(HTTPContext httpContext) {
+    public String createPost(Context context) {
 
         return "success";
     }
