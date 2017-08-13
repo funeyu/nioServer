@@ -58,13 +58,13 @@ public class Server {
 
                     if(key.isAcceptable()) {
                         ServerSocketChannel ssc = (ServerSocketChannel) key.channel();
-                        key.attach(connectionCount ++);
                         SocketChannel sc = ssc.accept();
                         sc.configureBlocking(false);
                         sc.register(session.getSelector(), SelectionKey.OP_READ);
                     }
 
                     if(key.isReadable() && key.isValid()) {
+                        key.attach(connectionCount ++);
                         key.cancel();
                         handler.onRead(key);
                     }

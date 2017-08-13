@@ -26,5 +26,7 @@ public class CookieParser extends ParserBase{
         }
 
         context.getReq().setCookies(cookieMap);
+
+        super.next(context, headerMap);
     }
 }

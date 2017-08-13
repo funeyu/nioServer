@@ -85,7 +85,7 @@ public class HttpHandler implements Handler {
                         return;
                     }
 
-
+                    cb.initReader();     //初始化reader,ready for parserHeader
                     ArrayList<String> headers = extractHeader(cb);
 
                     // 初始化request, response, context

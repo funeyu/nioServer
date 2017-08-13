@@ -24,6 +24,7 @@ public class Connection {
     public static Connection init(long id, int bufferSize, SelectionKey sk) {
         Connection connection = new Connection();
         connection.id = id;
+        connection.sk = sk;
         connection.cb = ChannelBuffer.init(bufferSize, (SocketChannel) sk.channel(), connection);
 
         return connection;
@@ -44,6 +45,7 @@ public class Connection {
 
         SocketChannel sc = (SocketChannel)sk.channel();
         sc.write(byteBuffer);
+        close();    // 这里不close client端就得不到数据
     }
 
     public ChannelBuffer getChannelBuffer() {

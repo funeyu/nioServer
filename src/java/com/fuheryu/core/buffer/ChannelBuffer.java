@@ -51,7 +51,7 @@ public class ChannelBuffer {
     }
 
     public void initReader() {
-        this.reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(container.array(), readed, size)));
+        this.reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(container.array(), 0, readed)));
     }
 
     public void write(ByteBuffer byteBuffer) {

@@ -32,6 +32,7 @@ public class Response {
 
     public static Response init (Connection conn) {
         Response response = new Response();
+        response.conn = conn;
 
         return response;
     }
