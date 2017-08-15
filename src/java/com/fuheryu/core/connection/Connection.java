@@ -44,6 +44,7 @@ public class Connection {
     public void write(ByteBuffer byteBuffer) throws IOException {
 
         SocketChannel sc = (SocketChannel)sk.channel();
+        byteBuffer.flip();
         sc.write(byteBuffer);
         close();    // 这里不close client端就得不到数据
     }
