@@ -1,4 +1,4 @@
-package com.fuheryu.dbpool;
+package com.fuheryu.db;
 
 /**
  * Created by fuheyu on 2017/8/10.

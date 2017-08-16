@@ -173,43 +173,4 @@ public class Utils {
     }
 
 
-
-//    public static void main(String[] args) {
-//
-//        String hostName = "localhost";
-//        String dbName = "seckill";
-//        String userName = "root";
-//        String passWord = "funer8090";
-//
-//        try {
-//            Class.forName("com.mysql.jdbc.Driver");
-//            String connectionURL = "jdbc:mysql://" + hostName + ":3306/" + dbName;
-//            Connection conn = DriverManager.getConnection(connectionURL, userName, passWord);
-//
-//            Statement st = conn.createStatement();
-//
-//            String sql = "select name, number, start_time from seckill";
-//
-//            ResultSet result = st.executeQuery(sql);
-//
-//            while(result.next()) {
-//                System.out.println("--------------------");
-//                System.out.println("name:" + result.getString(1));
-//                System.out.println("number:" + result.getString(2));
-//                System.out.println("start_time:" + result.getString("start_time"));
-//            }
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        DB mysql = DB.open("jdbc:mysql://localhost:3306/seckill", userName, passWord);
-//        List<Record> list = mysql.active("seckill").findBy("name", "1000元秒杀iphone6");
-//        for(Record l : list) {
-//            System.out.println("record" + l.get("number"));
-//        }
-//
-//    }
-
 }
