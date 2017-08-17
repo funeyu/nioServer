@@ -36,16 +36,16 @@ public class DBConnection implements DataSourceBase{
 
         String dbUrl = Utils.getProperty("dbUrl");
         if(dbUrl.indexOf("mysql") > -1) {
-            return getNonPooledConnection("MYSQL", username, password);
+            return getNonPooledConnection("MYSQL_DRIVER", username, password);
         }
         else if(dbUrl.indexOf("oracle") > -1) {
-            return getNonPooledConnection("ORACLE", username, password);
+            return getNonPooledConnection("ORACLE_DRIVER", username, password);
         }
         else if(dbUrl.indexOf("db2") > -1) {
-            return getNonPooledConnection("DB2", username, password);
+            return getNonPooledConnection("DB2_DRIVER", username, password);
         }
         else if(dbUrl.indexOf("postgresql") > -1) {
-            return getNonPooledConnection("POSTGRESQL", username, password);
+            return getNonPooledConnection("POSTGRESQL_DRIVER", username, password);
         }
 
         throw new NoConnectionTypeException(String.format("no such url: %s connection", dbUrl));
