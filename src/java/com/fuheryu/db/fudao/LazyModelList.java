@@ -41,7 +41,6 @@ public class LazyModelList<E extends Model> extends ArrayList {
         return offSet;
     }
 
-
     public int getLimit() {
         return limit;
     }

@@ -1,6 +1,5 @@
 package com.fuheryu.db.fudao;
 
-import javax.jws.WebParam;
 import java.util.HashMap;
 import java.util.List;
 
@@ -9,36 +8,26 @@ import java.util.List;
  */
 public class Model {
 
-    private HashMap<String, String> rawData = new HashMap<>();
+    private HashMap<String, ColumData> rawData = new HashMap<>();
 
     /**
      * where的查询
      * @param query
      * @return
      */
-   public static<T extends Model> LazyModelList<T> where(String query) {
+   public static<T extends Model> LazyModelList<T> where(String query, Class<T> clazz) {
 
-
-       ModelDelegate.where(Model.<T>modelClass());
-       return null;
-   }
-
-   protected static <T extends Model> Class<T> modelClass() {
-
-       return T.modelClass();
+       return ModelDelegate.where(clazz, query);
    }
 
    public static<T extends Model> void register(Class<T> clazz) {
-        ModelDelegate.register(clazz);
+
+       ModelDelegate.register(clazz);
    }
 
-   public static <E extends Model> void say(Class<E> clazz) {
-        System.out.println(clazz.getSimpleName());
-   }
+   public static <T extends Model> void say(Class<T> clazz) {
 
-   public static List<? extends Model> execSQL() {
-
-       return null;
+       System.out.println(clazz.getSimpleName());
    }
 
     /**
@@ -46,7 +35,8 @@ public class Model {
      * @param query
      * @return
      */
-   public static Model findOne(String query) {
+   public static <T extends Model> T findOne(String query, Class<T> clazz) {
+
 
        return null;
    }
@@ -57,7 +47,8 @@ public class Model {
      * @param value
      * @return
      */
-   public Model set(String key, String value) {
+   public Model set(String key, ColumData value) {
+
        rawData.put(key, value);
        return this;
    };
@@ -78,5 +69,8 @@ public class Model {
 
    };
 
+   public HashMap<String, ColumData> rawData() {
+       return rawData;
+   }
 
 }
