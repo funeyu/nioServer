@@ -1,6 +1,4 @@
-package com.fuheryu.db.fupool;
-
-import me.zzp.ar.DB;
+package com.fuheryu.fupool;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -11,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by fuheyu on 2017/8/16.
  */
-public class ConnectionPool extends DBConnection {
+public class FuPool extends DBConnection {
 
     private List<Connection> avaliableConnections ;
 
@@ -25,18 +23,41 @@ public class ConnectionPool extends DBConnection {
 
     private AtomicInteger created = new AtomicInteger(0);
 
-    private ConnectionPool () {}
+    private static FuPool pool;
+
+    private FuPool() {}
+
 
     /**
-     * 根据size容量初创一定个数的connection 存放于avaliableConneciotns中
-     * @param size
-     * @param name
-     * @param pass
+     * 根据size容量初创一定个数的connection 存放于avaliableConnections中
      * @return
      * @throws SQLException
      */
-    public static ConnectionPool bootStrap(int size, int maxSize, String name, String pass) throws SQLException {
-        ConnectionPool pool = new ConnectionPool();
+    public static synchronized FuPool bootStrap() throws SQLException {
+        if(pool != null) {
+            return pool;
+        }
+
+        String name = Utils.getProperty("dbuser");
+        String pass = Utils.getProperty("dbpass");
+        int initSize = Integer.parseInt(Utils.getProperty("dbpoolsize"));
+        int maxSize = Integer.parseInt(Utils.getProperty("dbmaxconnection"));
+        pool = init(initSize, maxSize, name, pass);
+
+        return pool;
+    }
+
+    /**
+     * 根据相应的设置得到一个数据库连接池
+     * @param size
+     * @param maxSize
+     * @param pass
+     * @param name
+     * @return
+     * @throws SQLException
+     */
+    private static FuPool init(int size, int maxSize, String name, String pass) throws SQLException {
+        FuPool pool = new FuPool();
         List<Connection> avaliableConnections = new ArrayList<>();
 
         for(int i = 0; i < size ; i ++) {
@@ -99,6 +120,14 @@ public class ConnectionPool extends DBConnection {
             usedConnections.remove(connection);
         }
 
+    }
+
+    public static void main(String[] args) {
+        try {
+            bootStrap();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

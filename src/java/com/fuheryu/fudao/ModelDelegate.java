@@ -1,7 +1,7 @@
-package com.fuheryu.db.fudao;
+package com.fuheryu.fudao;
 
 import com.alibaba.fastjson.JSON;
-import com.fuheryu.db.fupool.ConnectionPool;
+import com.fuheryu.fupool.FuPool;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -43,9 +43,9 @@ public final class ModelDelegate {
         System.out.println(sql.toString());
 
         // 执行sql
-        ConnectionPool pool = null;
+        FuPool pool = null;
         try {
-            pool = ConnectionPool.bootStrap(4,  64, "root", "funer8090");
+            pool = FuPool.bootStrap();
             Connection connection = pool.getOne();
             Statement st = connection.createStatement();
 
@@ -79,7 +79,6 @@ public final class ModelDelegate {
 
     public static void main(String[] args) {
 
-        ModelDelegate.register(Seckill.class);
         Seckill seckill = ModelDelegate.findOne(Seckill.class, "number = 200");
         System.out.println(JSON.toJSONString(seckill.rawData()));
     }

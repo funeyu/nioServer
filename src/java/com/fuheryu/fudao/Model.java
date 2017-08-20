@@ -1,7 +1,6 @@
-package com.fuheryu.db.fudao;
+package com.fuheryu.fudao;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by fuheyu on 2017/8/18.
@@ -25,10 +24,6 @@ public class Model {
        ModelDelegate.register(clazz);
    }
 
-   public static <T extends Model> void say(Class<T> clazz) {
-
-       System.out.println(clazz.getSimpleName());
-   }
 
     /**
      * 根据query查询查询某个结果
@@ -37,8 +32,7 @@ public class Model {
      */
    public static <T extends Model> T findOne(String query, Class<T> clazz) {
 
-
-       return null;
+       return ModelDelegate.findOne(clazz, query);
    }
 
     /**

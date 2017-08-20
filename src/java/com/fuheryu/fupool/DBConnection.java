@@ -1,4 +1,4 @@
-package com.fuheryu.db.fupool;
+package com.fuheryu.fupool;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -31,7 +31,7 @@ public class DBConnection implements DataSourceBase{
         return null;
     }
 
-    public Connection getNonPooledConnection(String username, String password)
+    protected Connection getNonPooledConnection(String username, String password)
             throws SQLException,NoConnectionTypeException {
 
         String dbUrl = Utils.getProperty("dbUrl");

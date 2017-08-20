@@ -1,6 +1,4 @@
-package com.fuheryu.db.fudao;
-
-import java.util.HashMap;
+package com.fuheryu.fudao;
 
 /**
  * Created by fuheyu on 2017/8/18.

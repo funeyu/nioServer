@@ -1,4 +1,4 @@
-package com.fuheryu.db.fupool;
+package com.fuheryu.fupool;
 
 /**
  * Created by fuheyu on 2017/8/17.

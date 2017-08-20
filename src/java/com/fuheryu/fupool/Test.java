@@ -1,4 +1,4 @@
-package com.fuheryu.db.fupool;
+package com.fuheryu.fupool;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -11,9 +11,11 @@ import java.sql.Statement;
 public class Test {
 
     public static void main(String[] args) {
+        FuPool pool =null;
+        Connection connection =null;
         try {
-            ConnectionPool pool = ConnectionPool.bootStrap(4,  64, "root", "funer8090");
-            Connection connection = pool.getOne();
+            pool = FuPool.bootStrap();
+            connection = pool.getOne();
             Statement st = connection.createStatement();
             String sql = "select name, number, start_time from seckill";
             ResultSet result = st.executeQuery(sql);
@@ -28,6 +30,10 @@ public class Test {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            if(pool != null && connection != null) {
+                pool.returnedOne(connection);
+            }
         }
     }
 }

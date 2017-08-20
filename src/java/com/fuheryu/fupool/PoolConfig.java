@@ -1,4 +1,4 @@
-package com.fuheryu.db.fupool;
+package com.fuheryu.fupool;
 
 import java.util.HashMap;
 

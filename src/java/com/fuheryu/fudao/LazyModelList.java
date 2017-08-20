@@ -1,4 +1,4 @@
-package com.fuheryu.db.fudao;
+package com.fuheryu.fudao;
 
 import java.util.ArrayList;
 
