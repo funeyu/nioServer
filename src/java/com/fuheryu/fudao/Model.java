@@ -51,9 +51,9 @@ public class Model {
      * 删除
      * @return
      */
-   public boolean delete() {
+   public static <T extends Model> boolean delete(String query, Class<T> clazz) {
 
-       return false;
+       return ModelDelegate.delete(clazz, query);
    };
 
     /**

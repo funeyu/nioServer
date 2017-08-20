@@ -77,6 +77,10 @@ public final class ModelDelegate {
         return null;
     }
 
+    public static <T extends Model> boolean delete(Class<T> clazz, String query) {
+        return false;
+    }
+
     public static void main(String[] args) {
 
         Seckill seckill = ModelDelegate.findOne(Seckill.class, "number = 200");
