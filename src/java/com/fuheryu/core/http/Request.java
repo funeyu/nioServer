@@ -17,7 +17,7 @@ public class Request {
 
     private Map<String, String> cookies;
 
-    private Map<String, String> params;
+    private Map<String, String> params = new HashMap<>();
 
     private List<String> accept;
 
@@ -69,8 +69,32 @@ public class Request {
         this.cookies = cookieMap;
     }
 
-    public void setUrl(String url) {
+    private void setUrl(String url) {
         this.url = url;
+    }
+
+    private void parseParams(String paramsStr) {
+        String[] strings = paramsStr.split("&");
+        for(int i = 0; i < strings.length; i ++) {
+            String[] pars = strings[i].split("=");
+            params.put(pars[0], pars[1]);
+        }
+    }
+
+    public void parseUrl(String url) {
+        String[] splices = url.split("\\?") ;
+        setUrl(splices[0]);
+
+        if(splices.length > 1) {
+            String paramsStr = splices[1];
+            // 解析路径的参数
+            parseParams(paramsStr);
+        }
+    }
+
+    public String param(String key) {
+
+        return params.get(key);
     }
 
     public void setMethod(String method) {
@@ -91,5 +115,11 @@ public class Request {
 
     public List<String> getAcceptLanguage() {
         return acceptLanguage;
+    }
+
+    public static void main(String[] args) {
+        Request req = new Request();
+        req.parseUrl("/hello?num=200&java=2394");
+        System.out.println(req.param("num"));
     }
 }

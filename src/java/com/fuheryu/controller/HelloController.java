@@ -16,7 +16,7 @@ public class HelloController {
 
         DemoService service = (DemoService) ServiceFactory.one(DemoService.class);
 
-        return service.sayHello();
+        return service.queryByNumber(200);
     }
 
     @AnnotationFactory.RouterMapping(path="/newPost", method = "post")

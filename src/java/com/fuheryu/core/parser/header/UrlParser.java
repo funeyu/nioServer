@@ -18,7 +18,7 @@ public class UrlParser extends ParserBase {
         if((url = headerMap.get("GET")) != null) {
             String[] slices = url.split(" ");
             context.getReq().setMethod(slices[0]);
-            context.getReq().setUrl(slices[1]);
+            context.getReq().parseUrl(slices[1]);
             context.getReq().setHttpVersion(slices[2]);
 
             super.next(context, headerMap);
