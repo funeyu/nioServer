@@ -3,6 +3,7 @@ package com.fuheryu.fudao;
 import com.alibaba.fastjson.JSON;
 import com.fuheryu.fupool.FuPool;
 
+import javax.jws.WebParam;
 import java.sql.*;
 import java.util.HashMap;
 
@@ -18,12 +19,6 @@ public final class ModelDelegate {
     protected static void register(Class<? extends Model> model) {
 
         delegates.put(model.getSimpleName(), model);
-    }
-
-
-    protected static <T extends Model> LazyModelList<T> where(Class<T> clazz, String query) {
-
-        return null;
     }
 
     /**
@@ -62,6 +57,7 @@ public final class ModelDelegate {
                 one.set(columName, ColumData.init(columName, columType, result));
             }
 
+            pool.returnedOne(connection);
             return one;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -77,13 +73,47 @@ public final class ModelDelegate {
         return null;
     }
 
+    /**
+     * 根据查询条件 ，删除
+     * @param clazz
+     * @param query
+     * @param <T>
+     * @return
+     */
     public static <T extends Model> boolean delete(Class<T> clazz, String query) {
+
+        String name = clazz.getSimpleName();
+
+        StringBuffer sb = new StringBuffer("DELETE FROM ");
+        sb.append(name).append(" WHERE ").append(query);
+
+        FuPool pool = null;
+        Connection connection = null;
+
+        try {
+            pool = FuPool.bootStrap();
+            connection = pool.getOne();
+            Statement st = connection.createStatement();
+            st.executeUpdate(sb.toString());
+            return true;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if(pool != null && connection != null) {
+                pool.returnedOne(connection);
+            }
+        }
         return false;
     }
 
     public static void main(String[] args) {
+//
+//        Seckill seckill = ModelDelegate.findOne(Seckill.class, "number = 200");
+//        System.out.println(JSON.toJSONString(seckill.rawData()));
+//        ModelDelegate.delete(Seckill.class, "number = 200");
 
-        Seckill seckill = ModelDelegate.findOne(Seckill.class, "number = 200");
-        System.out.println(JSON.toJSONString(seckill.rawData()));
+        System.out.println(String.format("数据是：%d, %d", 90,89));
     }
 }

@@ -1,5 +1,8 @@
 package com.fuheryu.fudao;
 
+import com.alibaba.fastjson.JSON;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -16,7 +19,7 @@ public class Model {
      */
    public static<T extends Model> LazyModelList<T> where(String query, Class<T> clazz) {
 
-       return ModelDelegate.where(clazz, query);
+       return LazyModelList.where(query, clazz);
    }
 
    public static<T extends Model> void register(Class<T> clazz) {
@@ -60,11 +63,18 @@ public class Model {
      * 将model存到db中
      */
    public void save() {
-
+    
    };
 
    public HashMap<String, ColumData> rawData() {
        return rawData;
+   }
+
+
+   public static void main(String[]args) {
+       LazyModelList<Seckill> datas = Model.where("number = 100", Seckill.class);
+       Model seckill = datas.get(0);
+       System.out.println(JSON.toJSONString(seckill.rawData()));
    }
 
 }
