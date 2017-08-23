@@ -1,5 +1,7 @@
 package com.fuheryu.fudao;
 
+import java.sql.PreparedStatement;
+
 /**
  * Created by fuheyu on 2017/8/18.
  */
@@ -10,5 +12,9 @@ public class Schema {
     public static void main(String[]args) {
         System.out.println();
 
+    }
+
+    public static PreparedStatement fill(PreparedStatement ps, String ...params) {
+        return null;
     }
 }

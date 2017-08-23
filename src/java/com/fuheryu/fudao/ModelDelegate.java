@@ -16,11 +16,6 @@ public final class ModelDelegate {
 
     private final static HashMap<Class<? extends Model>, String> models = new HashMap<>();
 
-    protected static void register(Class<? extends Model> model) {
-
-        delegates.put(model.getSimpleName(), model);
-    }
-
     /**
      * 这个代码是一坨啊，没拆分啊， 最小功能啊
      * @param clazz
@@ -106,6 +101,16 @@ public final class ModelDelegate {
             }
         }
         return false;
+    }
+
+    /**
+     * 真实地处理数据insert的操作
+     * @param clazz
+     * @param <T>
+     */
+    public static <T extends Model> void save(T clazz) {
+
+
     }
 
     public static void main(String[] args) {

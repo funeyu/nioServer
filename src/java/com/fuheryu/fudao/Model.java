@@ -2,7 +2,6 @@ package com.fuheryu.fudao;
 
 import com.alibaba.fastjson.JSON;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -21,12 +20,6 @@ public class Model {
 
        return LazyModelList.where(query, clazz);
    }
-
-   public static<T extends Model> void register(Class<T> clazz) {
-
-       ModelDelegate.register(clazz);
-   }
-
 
     /**
      * 根据query查询查询某个结果
@@ -62,8 +55,8 @@ public class Model {
     /**
      * 将model存到db中
      */
-   public void save() {
-    
+   public static <T extends Model> void save(Class<T> clazz) {
+
    };
 
    public HashMap<String, ColumData> rawData() {
