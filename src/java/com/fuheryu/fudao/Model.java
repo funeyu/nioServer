@@ -2,15 +2,32 @@ package com.fuheryu.fudao;
 
 import com.alibaba.fastjson.JSON;
 
+import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * Created by fuheyu on 2017/8/18.
  */
-public class Model {
+public abstract class Model {
 
     private HashMap<String, ColumData> rawData = new HashMap<>();
 
+
+    /**
+     * Model下的字段整理,返回一个string 数组
+     * 如：
+     *  A extends Model {
+     *      public String name;
+     *      public String sex;
+     *  }
+     *  就返回为['name', 'sex']
+     * @return
+     */
+    public abstract String[] organize();
+
+    public abstract ArrayList<ModelField> collectFiledInfo();
     /**
      * where的查询
      * @param query
@@ -55,8 +72,22 @@ public class Model {
     /**
      * 将model存到db中
      */
-   public static <T extends Model> void save(Class<T> clazz) {
+   public  <T extends Model> void save() {
 
+       try {
+           ModelDelegate.save(this);
+
+       } catch (NoSuchMethodException e) {
+           e.printStackTrace();
+       } catch (SQLException e) {
+           e.printStackTrace();
+       } catch (InterruptedException e) {
+           e.printStackTrace();
+       } catch (InvocationTargetException e) {
+           e.printStackTrace();
+       } catch (IllegalAccessException e) {
+           e.printStackTrace();
+       }
    };
 
    public HashMap<String, ColumData> rawData() {

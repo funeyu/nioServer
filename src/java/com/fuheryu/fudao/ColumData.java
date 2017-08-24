@@ -1,7 +1,13 @@
 package com.fuheryu.fudao;
 
+import java.lang.reflect.Field;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by fuheyu on 2017/8/19.
@@ -93,6 +99,41 @@ public class ColumData {
         return colum;
     }
 
+    public static void fillStatement(PreparedStatement pre, Object object, Class<?> type, int index) throws SQLException {
+        switch (type.getSimpleName()) {
+            case "string":
+                pre.setString(index, (String)object);
+                break;
+            case "int":
+                pre.setInt(index, (Integer)object);
+                break;
+            case "biginteger":
+                pre.setLong(index, (long)object);
+                break;
+            case "timestamp":
+                pre.setTimestamp(index, (Timestamp)object);
+                break;
+
+        }
+    }
+
+    /**
+     * 获取Model实例的字段名称,Map<fieldName, fieldType>
+     * @param model
+     * @param <T>
+     * @return
+     */
+    public static <T extends Model> ArrayList<ModelField> getFiledName(T model) {
+
+        Field[] fields = model.getClass().getDeclaredFields();
+        ArrayList<ModelField> results = new ArrayList<>();
+        for(int i = 0; i < fields.length; i ++) {
+
+            results.add(ModelField.init(fields[i].getName(), fields[i].getType()));
+        }
+
+        return results;
+    }
 
     public void setColumName(String columName) {
         this.columName = columName;

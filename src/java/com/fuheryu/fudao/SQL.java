@@ -1,0 +1,61 @@
+package com.fuheryu.fudao;
+
+import java.math.BigInteger;
+import java.sql.PreparedStatement;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+
+/**
+ * Created by fuheyu on 2017/8/24.
+ */
+public class SQL {
+
+    /**
+     * 根据Model 创建insert的sql语句
+     * @param model
+     * @param <T>
+     * @return
+     */
+    public static <T extends Model> String insert(ArrayList<ModelField> fieldsInfo, T model) {
+
+        StringBuffer sb = new StringBuffer("INSERT INTO ");
+        sb.append(model.getClass().getSimpleName());
+        sb.append(" (");
+
+        for (ModelField mf : fieldsInfo) {
+            sb.append(mf.getFiledName()).append(",");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append(") VALUE (");
+
+        for (int i = 0; i <fieldsInfo.size(); i ++) {
+            sb.append("?,");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append(")");
+
+        return sb.toString();
+    }
+
+    /**
+     * 根据model填充预处理(?, ?, ?, ?)
+     * @param pre
+     * @param model
+     * @param <T>
+     * @return
+     */
+    public static <T extends Model> PreparedStatement fillPreparedStatement(PreparedStatement pre, T model) {
+
+        return pre;
+    }
+
+    private static <T extends Model> void oneColumn(PreparedStatement pre, T model, String columnName) {
+
+    }
+
+    public static void main(String[] args) {
+        Seckill s = new Seckill("test", 988, new Timestamp(System.currentTimeMillis()),
+                new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), new BigInteger("1098778987672"));
+
+    }
+}
