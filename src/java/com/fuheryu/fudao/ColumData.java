@@ -1,6 +1,7 @@
 package com.fuheryu.fudao;
 
 import java.lang.reflect.Field;
+import java.math.BigInteger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -100,7 +101,7 @@ public class ColumData {
     }
 
     public static void fillStatement(PreparedStatement pre, Object object, Class<?> type, int index) throws SQLException {
-        switch (type.getSimpleName()) {
+        switch (type.getSimpleName().toLowerCase()) {
             case "string":
                 pre.setString(index, (String)object);
                 break;
@@ -108,7 +109,7 @@ public class ColumData {
                 pre.setInt(index, (Integer)object);
                 break;
             case "biginteger":
-                pre.setLong(index, (long)object);
+                pre.setLong(index, ((BigInteger)object).longValue());
                 break;
             case "timestamp":
                 pre.setTimestamp(index, (Timestamp)object);

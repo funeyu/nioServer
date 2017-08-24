@@ -131,7 +131,7 @@ public final class ModelDelegate {
             Method m = model.getClass().getMethod(getMethodName(key));
             Object o = m.invoke(model);
 
-            ColumData.fillStatement(pre, o, field.getFiledType(), index++);
+            ColumData.fillStatement(pre, o, field.getFiledType(), ++index);
         }
 
         pre.executeUpdate();
@@ -158,8 +158,8 @@ public final class ModelDelegate {
 //        ModelDelegate.delete(Seckill.class, "number = 200");
 
 //        System.out.println(String.format("数据是：%d, %d", 90,89));
-        Seckill seckill = new Seckill("傅鹤雨", 7897, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()),
-                new Timestamp(System.currentTimeMillis()), new BigInteger("245423"));
+        Seckill seckill = new Seckill("funeyu", 7897, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()),
+                new Timestamp(System.currentTimeMillis()), new BigInteger("2434425423"));
         seckill.save();
     }
 }
