@@ -74,7 +74,6 @@ public class LazyModelList<E extends Model> extends ArrayList {
         if(!delegate.isEmpty()) {
             return delegate;
         }
-
         buildSQL().excuteSQL();
         return delegate;
     }
@@ -91,7 +90,7 @@ public class LazyModelList<E extends Model> extends ArrayList {
             sb.append(" ").append(orderBy);
         }
         if(limit != 0) {
-            sb.append("LIMIT ").append(String.format("%d,%d", offSet, limit));
+            sb.append(" LIMIT ").append(String.format("%d,%d", offSet, limit));
         }
 
         return this.setSql(sb.toString());
@@ -134,13 +133,13 @@ public class LazyModelList<E extends Model> extends ArrayList {
 
     }
 
-    public LazyModelList<E> setOffSet(int offSet) {
+    public LazyModelList<E> offSet(int offSet) {
 
         this.offSet = offSet;
         return this;
     }
 
-    public LazyModelList<E> setLimit(int limit) {
+    public LazyModelList<E> limit(int limit) {
 
         this.limit = limit;
         return this;

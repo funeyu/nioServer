@@ -224,9 +224,4 @@ public class ColumData {
         return rawData;
     }
 
-    public static void main(String[] args) {
-
-        byte[] s = new byte[9];
-        System.out.println(s.getClass().getTypeName());
-    }
 }

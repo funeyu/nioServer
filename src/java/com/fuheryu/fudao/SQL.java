@@ -19,7 +19,7 @@ public class SQL {
     public static <T extends Model> String insert(ArrayList<ModelField> fieldsInfo, T model) {
 
         StringBuffer sb = new StringBuffer("INSERT INTO ");
-        sb.append(model.getClass().getSimpleName());
+        sb.append(model.getClass().getSimpleName().toLowerCase());
         sb.append(" (");
 
         for (ModelField mf : fieldsInfo) {
@@ -61,13 +61,4 @@ public class SQL {
         return sb;
     }
 
-    private static <T extends Model> void oneColumn(PreparedStatement pre, T model, String columnName) {
-
-    }
-
-    public static void main(String[] args) {
-        Seckill s = new Seckill("test", 988, new Timestamp(System.currentTimeMillis()),
-                new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), new BigInteger("1098778987672"));
-
-    }
 }

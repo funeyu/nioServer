@@ -86,9 +86,4 @@ public class LazyUpdate<T extends Model> extends LazyBase {
         return sb.toString();
     }
 
-    public static void main(String[] args) {
-
-        LazyUpdate<Seckill> lazyUpdate = LazyUpdate.init("seckill_id = 1000", Seckill.class);
-        lazyUpdate.with("number", 10000).executeSQL();
-    }
 }

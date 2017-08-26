@@ -10,7 +10,7 @@ public class DemoService {
 
     public String queryByNumber(int number) {
 
-        Seckill s = Seckill.findOne("number = " + number, Seckill.class);
+        Seckill s = Seckill.findOne(Seckill.class, "number = " + number);
         return JSON.toJSONString(s.rawData());
     }
 }

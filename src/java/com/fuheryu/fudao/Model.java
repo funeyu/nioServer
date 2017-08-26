@@ -33,7 +33,7 @@ public abstract class Model {
      * @param query
      * @return
      */
-   public static<T extends Model> LazyModelList<T> where(String query, Class<T> clazz) {
+   public static<T extends Model> LazyModelList<T> where(Class<T> clazz, String query) {
 
        return LazyModelList.where(query, clazz);
    }
@@ -43,7 +43,7 @@ public abstract class Model {
      * @param query
      * @return
      */
-   public static <T extends Model> T findOne(String query, Class<T> clazz) {
+   public static <T extends Model> T findOne(Class<T> clazz, String query) {
 
        return ModelDelegate.findOne(clazz, query);
    }
@@ -64,7 +64,7 @@ public abstract class Model {
      * 删除
      * @return
      */
-   public static <T extends Model> boolean delete(String query, Class<T> clazz) {
+   public static <T extends Model> boolean delete(Class<T> clazz, String query) {
 
        return ModelDelegate.delete(clazz, query);
    };
@@ -97,13 +97,6 @@ public abstract class Model {
 
    public HashMap<String, ColumData> rawData() {
        return rawData;
-   }
-
-
-   public static void main(String[]args) {
-       LazyModelList<Seckill> datas = Model.where("number = 100", Seckill.class);
-       Model seckill = datas.get(0);
-       System.out.println(JSON.toJSONString(seckill.rawData()));
    }
 
 }

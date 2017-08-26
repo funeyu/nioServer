@@ -33,7 +33,6 @@ public final class ModelDelegate {
         // 组装sql
         StringBuffer sql = new StringBuffer("select * from ");
         sql.append(name).append(" where ").append(query);
-        System.out.println(sql.toString());
 
         // 执行sql
         FuPool pool = null;
@@ -44,6 +43,10 @@ public final class ModelDelegate {
 
             ResultSet result = st.executeQuery(sql.toString());
             result.next();
+            if(result.wasNull()) { // 没有查到数据
+                return null;
+            }
+
             ResultSetMetaData metaData = result.getMetaData();
             int colum = metaData.getColumnCount();
 
@@ -80,7 +83,7 @@ public final class ModelDelegate {
      */
     public static <T extends Model> boolean delete(Class<T> clazz, String query) {
 
-        String name = clazz.getSimpleName();
+        String name = clazz.getSimpleName().toLowerCase();
 
         StringBuffer sb = new StringBuffer("DELETE FROM ");
         sb.append(name).append(" WHERE ").append(query);
@@ -147,17 +150,4 @@ public final class ModelDelegate {
         return "get" + (key.substring(0,1).toUpperCase() + key.substring(1));
     }
 
-
-    public static void main(String[] args) {
-//
-//        Seckill seckill = ModelDelegate.findOne(Seckill.class, "number = 200");
-//        System.out.println(JSON.toJSONString(seckill.rawData()));
-//        ModelDelegate.delete(Seckill.class, "number = 200");
-
-//        System.out.println(String.format("数据是：%d, %d", 90,89));
-        Seckill seckill = new Seckill("funeyu", 7897, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()),
-                new Timestamp(System.currentTimeMillis()), new BigInteger("2434425423"));
-        seckill.save();
-
-    }
 }

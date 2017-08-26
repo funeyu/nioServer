@@ -30,6 +30,8 @@ public class Seckill extends Model {
         this.seckill_id = seckill_id;
     }
 
+    public Seckill() {}
+
     @Override
     public String[] organize() {
 
