@@ -8,17 +8,17 @@ import java.util.ArrayList;
  */
 public class Seckill extends Model {
 
-    public String name;
+    private String name;
 
-    public int number;
+    private int number;
 
-    public Timestamp start_time;
+    private Timestamp start_time;
 
-    public Timestamp end_time;
+    private Timestamp end_time;
 
-    public Timestamp create_time;
+    private Timestamp create_time;
 
-    public BigInteger seckill_id;
+    private BigInteger seckill_id;
 
 
     public Seckill(String name, int number, Timestamp start_time, Timestamp end_time, Timestamp create_time, BigInteger seckill_id) {
@@ -39,7 +39,7 @@ public class Seckill extends Model {
     @Override
     public ArrayList<ModelField> collectFiledInfo() {
 
-        return ColumData.getFiledName(this);
+        return ColumData.extractFieldData(this);
     }
 
     public void setName(String name) {

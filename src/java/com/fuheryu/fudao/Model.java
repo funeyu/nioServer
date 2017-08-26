@@ -90,6 +90,11 @@ public abstract class Model {
        }
    };
 
+   public static <T extends Model>LazyUpdate<T> update(String where, Class<T> clazz) {
+
+       return LazyUpdate.init(where, clazz);
+   }
+
    public HashMap<String, ColumData> rawData() {
        return rawData;
    }

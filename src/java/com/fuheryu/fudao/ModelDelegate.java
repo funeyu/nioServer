@@ -1,16 +1,13 @@
 package com.fuheryu.fudao;
 
-import com.alibaba.fastjson.JSON;
 import com.fuheryu.fupool.FuPool;
 
-import javax.jws.WebParam;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by fuheyu on 2017/8/19.
@@ -29,6 +26,7 @@ public final class ModelDelegate {
      * @return
      */
     public static <T extends Model> T findOne(Class<T> clazz, String query) {
+
         // 获取数据表名
         String name = clazz.getSimpleName().toLowerCase();
 
@@ -127,11 +125,9 @@ public final class ModelDelegate {
 
         int index = 0;
         for(ModelField field : fieldsInfo) {
-            String key = field.getFiledName();
-            Method m = model.getClass().getMethod(getMethodName(key));
-            Object o = m.invoke(model);
+            Object filedValue = field.getValue();
 
-            ColumData.fillStatement(pre, o, field.getFiledType(), ++index);
+            ColumData.fillStatement(pre, field, ++index);
         }
 
         pre.executeUpdate();
@@ -151,6 +147,7 @@ public final class ModelDelegate {
         return "get" + (key.substring(0,1).toUpperCase() + key.substring(1));
     }
 
+
     public static void main(String[] args) {
 //
 //        Seckill seckill = ModelDelegate.findOne(Seckill.class, "number = 200");
@@ -161,5 +158,6 @@ public final class ModelDelegate {
         Seckill seckill = new Seckill("funeyu", 7897, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis()), new BigInteger("2434425423"));
         seckill.save();
+
     }
 }

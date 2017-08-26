@@ -9,13 +9,18 @@ public class ModelField {
 
     private Class<?> filedType;
 
-    private ModelField(String filedName, Class<?> filedType) {
+    private Object value;
+
+    private ModelField(String filedName, Class<?> filedType, Object value) {
+
         this.filedName = filedName;
         this.filedType = filedType;
+        this.value = value;
     }
 
-    public static ModelField init(String filedName, Class<?> filedType) {
-        return new ModelField(filedName, filedType);
+    public static ModelField init(String filedName, Class<?> filedType, Object value) {
+
+        return new ModelField(filedName, filedType, value);
     }
 
     public String getFiledName() {
@@ -23,7 +28,12 @@ public class ModelField {
     }
 
     public Class<?> getFiledType() {
+
         return filedType;
+    }
+
+    public Object getValue() {
+        return value;
     }
 
     public void setFiledName(String filedName) {

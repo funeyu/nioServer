@@ -7,8 +7,10 @@ import java.util.ArrayList;
 
 /**
  * Created by fuheyu on 2017/8/18.
+ * 这个类是为了给page 分页等列表查询使用
  */
 public class LazyModelList<E extends Model> extends ArrayList {
+
     private int offSet = 0;
 
     private int limit = 0;
@@ -30,6 +32,7 @@ public class LazyModelList<E extends Model> extends ArrayList {
     }
 
     public int size() {
+
         if(delegate != null) {
             return delegate.size();
         }
@@ -45,6 +48,7 @@ public class LazyModelList<E extends Model> extends ArrayList {
      * @return
      */
     public static <E extends Model> LazyModelList<E> where(String sql, Class<E> clazz) {
+
         LazyModelList lazyModelList = new LazyModelList(clazz);
         lazyModelList.query = sql;
 
@@ -97,6 +101,7 @@ public class LazyModelList<E extends Model> extends ArrayList {
      * 后台的查询SQL语句，拼接sql查询，进行sql查询操作
      */
     private void excuteSQL() {
+
         FuPool pool = null;
         try {
             pool = FuPool.bootStrap();
@@ -130,26 +135,31 @@ public class LazyModelList<E extends Model> extends ArrayList {
     }
 
     public LazyModelList<E> setOffSet(int offSet) {
+
         this.offSet = offSet;
         return this;
     }
 
     public LazyModelList<E> setLimit(int limit) {
+
         this.limit = limit;
         return this;
     }
 
     public LazyModelList<E> setOrderBy(String orderBy) {
+
         this.orderBy = orderBy;
         return this;
     }
 
     public LazyModelList<E> setQuery(String query) {
+
         this.query = query;
         return this;
     }
 
     private LazyModelList<E> setSql(String sql) {
+
         this.sql = sql;
         return this;
     }

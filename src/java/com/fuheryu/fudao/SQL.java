@@ -38,15 +38,27 @@ public class SQL {
     }
 
     /**
-     * 根据model填充预处理(?, ?, ?, ?)
-     * @param pre
-     * @param model
+     * 拼接update的sql语句
+     * update 的sql类型：
+     * ("UPDATE items SET name = ?, category = ?, price = ?, quantity = ? WHERE id = ?");
+     * @param fields
+     * @param clazz
      * @param <T>
      * @return
      */
-    public static <T extends Model> PreparedStatement fillPreparedStatement(PreparedStatement pre, T model) {
+    public static <T extends Model> StringBuffer update(ArrayList<ModelField> fields, Class<T> clazz) {
 
-        return pre;
+        StringBuffer sb = new StringBuffer("UPDATE ")
+                .append(clazz.getSimpleName().toLowerCase())
+                .append(" SET");
+        for(ModelField field : fields) {
+            sb.append(" ")
+                    .append(field.getFiledName())
+                    .append(" = ?,");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+
+        return sb;
     }
 
     private static <T extends Model> void oneColumn(PreparedStatement pre, T model, String columnName) {

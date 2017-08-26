@@ -1,11 +1,10 @@
 package com.fuheryu.fudao;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigInteger;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -100,40 +99,105 @@ public class ColumData {
         return colum;
     }
 
-    public static void fillStatement(PreparedStatement pre, Object object, Class<?> type, int index) throws SQLException {
-        switch (type.getSimpleName().toLowerCase()) {
+    public static void fillStatement(PreparedStatement pre, ModelField field, int index)throws SQLException {
+
+        String type = field.getFiledType().getSimpleName().toLowerCase();
+        Object fieldValue = field.getValue();
+
+        switch (type) {
             case "string":
-                pre.setString(index, (String)object);
+                pre.setString(index, (String)fieldValue);
                 break;
             case "int":
-                pre.setInt(index, (Integer)object);
+                pre.setInt(index, (Integer)fieldValue);
                 break;
             case "biginteger":
-                pre.setLong(index, ((BigInteger)object).longValue());
+                pre.setLong(index, ((BigInteger)fieldValue).longValue());
                 break;
             case "timestamp":
-                pre.setTimestamp(index, (Timestamp)object);
+                pre.setTimestamp(index, (Timestamp)fieldValue);
+                break;
+            case "float":
+                pre.setFloat(index, (Long)fieldValue);
+                break;
+            case "double":
+                pre.setDouble(index, (Double)fieldValue);
+                break;
+            case "time":
+                pre.setTime(index, (Time)fieldValue);
+                break;
+            case "byte[]":
+                pre.setBytes(index, (byte[])fieldValue);
                 break;
 
         }
     }
 
     /**
-     * 获取Model实例的字段名称,Map<fieldName, fieldType>
+     * 获取Model实例的字段数据
      * @param model
      * @param <T>
      * @return
      */
-    public static <T extends Model> ArrayList<ModelField> getFiledName(T model) {
+    public static <T extends Model> ArrayList<ModelField> extractFieldData(T model) {
 
         Field[] fields = model.getClass().getDeclaredFields();
+
         ArrayList<ModelField> results = new ArrayList<>();
         for(int i = 0; i < fields.length; i ++) {
-
-            results.add(ModelField.init(fields[i].getName(), fields[i].getType()));
+            Object fieldValue = filedValue(model, fields[i].getName());
+            results.add(ModelField.init(fields[i].getName(), fields[i].getType(), fieldValue));
         }
 
         return results;
+    }
+
+    /**
+     * 获取key下的属性值
+     * @param key
+     * @return
+     */
+    private static <T extends Model> Object filedValue(T model, String key) {
+
+        try {
+            Method m = model.getClass().getMethod(methodGET(key));
+            return m.invoke(model);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 获取某列名下字段的类型
+     * @param clazz
+     * @param key
+     * @param <T>
+     * @return
+     */
+    public static <T extends Model> Class filedType(Class<T> clazz, String key) {
+
+        try {
+            Field field = clazz.getDeclaredField(key);
+            return field.getType();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    /**
+     * 获取key的get方法
+     * @param key
+     * @return
+     */
+    private static String methodGET(String key) {
+
+        return "get" + (key.substring(0,1).toUpperCase() + key.substring(1));
     }
 
     public void setColumName(String columName) {
@@ -158,5 +222,11 @@ public class ColumData {
 
     public Object getRawData() {
         return rawData;
+    }
+
+    public static void main(String[] args) {
+
+        byte[] s = new byte[9];
+        System.out.println(s.getClass().getTypeName());
     }
 }
