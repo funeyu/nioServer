@@ -25,6 +25,7 @@ public class Seckill extends Model {
 
         this.name = name;
         this.number = number;
+        this.start_time = start_time;
         this.end_time = end_time;
         this.create_time = create_time;
         this.seckill_id = seckill_id;

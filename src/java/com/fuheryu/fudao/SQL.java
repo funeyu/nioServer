@@ -1,8 +1,5 @@
 package com.fuheryu.fudao;
 
-import java.math.BigInteger;
-import java.sql.PreparedStatement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 
 /**
@@ -60,5 +57,6 @@ public class SQL {
 
         return sb;
     }
+
 
 }
