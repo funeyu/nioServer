@@ -63,8 +63,9 @@ public class ChannelBuffer {
         }
     }
 
-    /*
-        获取输入信息的按行读
+    /**
+     * 获取输入信息的按行读
+     * @return
      */
     public String nextLine() {
 

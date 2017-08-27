@@ -20,7 +20,6 @@ public class Server {
     private AtomicBoolean listenning = new AtomicBoolean(true);
     private Handler handler;
     private Session session;
-    private Selector selector;
     private long connectionCount = 0;
 
     public static Server initServer(int port) {
@@ -42,37 +41,48 @@ public class Server {
     }
 
     public void start() {
+        new Thread(
+                () -> {
+                    try {
+                        while(listenning.get()) {
+                            int n = session.getSelector().select();
+                            if(n == 0) { // 没有指定的I/O事件发生
+                                continue;
+                            }
 
+                            Iterator<SelectionKey> selectionKeys = session.getSelector().selectedKeys().iterator();
+                            while (selectionKeys.hasNext()) {
+                                SelectionKey key = selectionKeys.next();
+                                selectionKeys.remove();
 
-        try {
-            while(listenning.get()) {
-                int n = session.getSelector().select();
-                if(n == 0) { // 没有指定的I/O事件发生
-                    continue;
-                }
+                                if(key.isAcceptable()) {
+                                    ServerSocketChannel ssc = (ServerSocketChannel) key.channel();
+                                    SocketChannel sc = ssc.accept();
+                                    sc.configureBlocking(false);
+                                    sc.register(session.getSelector(), SelectionKey.OP_READ);
+                                }
 
-                Iterator<SelectionKey> selectionKeys = session.getSelector().selectedKeys().iterator();
-                while (selectionKeys.hasNext()) {
-                    SelectionKey key = selectionKeys.next();
-                    selectionKeys.remove();
-
-                    if(key.isAcceptable()) {
-                        ServerSocketChannel ssc = (ServerSocketChannel) key.channel();
-                        SocketChannel sc = ssc.accept();
-                        sc.configureBlocking(false);
-                        sc.register(session.getSelector(), SelectionKey.OP_READ);
+                                if(key.isReadable() && key.isValid()) {
+                                    key.attach(connectionCount ++);
+                                    key.cancel();
+                                    handler.onRead(key);
+                                }
+                            }
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-
-                    if(key.isReadable() && key.isValid()) {
-                        key.attach(connectionCount ++);
-                        key.cancel();
-                        handler.onRead(key);
-                    }
                 }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ).start();
+
+    }
+
+    /**
+     * server监听的停止，只是将listening 设置成了
+     */
+    public void close() {
+
+        this.listenning.set(false);
     }
 
     public static void main(String[] arg) {

@@ -75,7 +75,7 @@ public class Response {
     }
 
     private void addJSONHeader() {
-        headers.put("Content-Type", "application/json; charset=utf-8");
+        headers.put("Content-Type", "application/json; charset=UTF-8");
     }
 
     private ByteBuffer writeLine(String line) throws IOException {
