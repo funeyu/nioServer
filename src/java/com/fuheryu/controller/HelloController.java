@@ -14,9 +14,10 @@ public class HelloController {
     @AnnotationFactory.RouterMapping(path="/hello", method = "get")
     public String sayHello(Context context) {
 
-        DemoService service = (DemoService) ServiceFactory.one(DemoService.class);
+//        DemoService service = (DemoService) ServiceFactory.one(DemoService.class);
 
-        return service.queryByNumber(200);
+//        return service.queryByNumber(200);
+        return "hello world";
     }
 
     @AnnotationFactory.RouterMapping(path="/newPost", method = "post")

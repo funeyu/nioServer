@@ -83,6 +83,11 @@ public class Server {
     public void close() {
 
         this.listenning.set(false);
+        try {
+            session.getSelector().close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] arg) {
@@ -90,6 +95,7 @@ public class Server {
         s.setHandler(HttpHandler.createHander());
 
         s.start();
+
     }
 
 }
