@@ -21,8 +21,8 @@ public class Response {
     private int responseCode = 200;
     private String responseReason = "ok";
     private Map<String, String> headers = new LinkedHashMap<String, String>();
-    private final static Charset charset = Charset.forName("UTF-8");
-    private final static CharsetEncoder encoder = charset.newEncoder();
+    private final  Charset charset = Charset.forName("UTF-8");
+    private final CharsetEncoder encoder = charset.newEncoder();
     private byte[] content;
 
     private Connection conn;
@@ -79,6 +79,7 @@ public class Response {
     }
 
     private ByteBuffer writeLine(String line) throws IOException {
+        encoder.reset();
         return encoder.encode(CharBuffer.wrap(line + "\r\n"));
     }
 
