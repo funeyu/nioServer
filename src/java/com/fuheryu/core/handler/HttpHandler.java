@@ -62,55 +62,50 @@ public class HttpHandler implements Handler {
 
     public void onRead(SelectionKey selectionKey) {
 
-        excutors.execute(new Runnable() {
+        try {
+            SocketChannel sc = (SocketChannel) selectionKey.channel();
 
-            public void run() {
-                try {
-                    SocketChannel sc = (SocketChannel) selectionKey.channel();
+            long connectionId = (long)selectionKey.attachment();
+            Connection connection = ConnectionFactory.getById("Connection_" + connectionId);
 
-                    long connectionId = (long)selectionKey.attachment();
-                    Connection connection = ConnectionFactory.getById("Connection_" + connectionId);
-
-                    ChannelBuffer cb;
-                    if(connection != null) {
-                        cb = connection.getChannelBuffer();
-                    } else {
-                        connection = ConnectionFactory.init(HEADER_BUFFFER_SIZE, connectionId, selectionKey);
-                    }
-
-                    cb = connection.getChannelBuffer();
-
-                    if(cb.read() < 1) {  // 关闭channel
-                        connection.close();
-                        return;
-                    }
-
-                    cb.initReader();     //初始化reader,ready for parserHeader
-                    ArrayList<String> headers = extractHeader(cb);
-
-                    // 初始化request, response, context
-                    Request req = Request.init();
-                    Response res = Response.init(connection);
-                    Context context = Context.init(req, res);
-
-                    parseHeader(context, headers);
-
-                    byte[] results = Router.use(context);
-
-
-                    context.getRes().setContent(results);
-                    if(context.getReq().getAccept() != null) {
-                        context.getRes().sendJSON();
-                    } else {
-                        context.getRes().sendJSON();
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
+            ChannelBuffer cb;
+            if(connection != null) {
+                cb = connection.getChannelBuffer();
+            } else {
+                connection = ConnectionFactory.init(HEADER_BUFFFER_SIZE, connectionId, selectionKey);
             }
-        });
+
+            cb = connection.getChannelBuffer();
+
+            if(cb.read() < 1) {  // 关闭channel
+                connection.close();
+                return;
+            }
+
+            cb.initReader();     //初始化reader,ready for parserHeader
+            ArrayList<String> headers = extractHeader(cb);
+
+            // 初始化request, response, context
+            Request req = Request.init();
+            Response res = Response.init(connection);
+            Context context = Context.init(req, res);
+
+            parseHeader(context, headers);
+
+            byte[] results = Router.use(context);
+
+
+            context.getRes().setContent(results);
+            if(context.getReq().getAccept() != null) {
+                context.getRes().sendJSON();
+            } else {
+                context.getRes().sendJSON();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public static Handler createHander() {
