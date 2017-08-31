@@ -51,7 +51,6 @@ public class Worker implements Runnable{
                     this.wait();
                     this.doWork();
 
-                    this.lock.notify();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
