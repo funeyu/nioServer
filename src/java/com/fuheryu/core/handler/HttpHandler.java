@@ -25,16 +25,19 @@ import java.util.concurrent.Executors;
  */
 public class HttpHandler implements Handler {
 
-    private ExecutorService excutors = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     private int count = 0;
-    private final static Charset charset = Charset.forName("UTF-8");
-    private final static CharsetEncoder encoder = charset.newEncoder();
+    private final  Charset charset = Charset.forName("UTF-8");
+    private final  CharsetEncoder encoder = charset.newEncoder();
     private final static int HEADER_BUFFFER_SIZE = 8192;
+    private SelectionKey selectionKey;
 
     // header解析链
     private final static ParserBase headerParserChain = new CookieParser(new UrlParser(null));
 
-    private HttpHandler(){}
+    private HttpHandler(SelectionKey key){
+
+        this.selectionKey = key;
+    }
 
     /*
         从request中提取出 header的数组
@@ -59,8 +62,8 @@ public class HttpHandler implements Handler {
         headerParserChain.next(context, headerMap);
     }
 
-
-    public void onRead(SelectionKey selectionKey) {
+    @Override
+    public void onRead() {
 
         try {
             SocketChannel sc = (SocketChannel) selectionKey.channel();
@@ -108,8 +111,8 @@ public class HttpHandler implements Handler {
 
     }
 
-    public static Handler createHander() {
-        Handler h = new HttpHandler();
+    public static Handler createHander(SelectionKey key) {
+        Handler h = new HttpHandler(key);
         return h;
     }
 

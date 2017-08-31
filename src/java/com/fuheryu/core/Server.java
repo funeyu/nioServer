@@ -7,6 +7,8 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import com.fuheryu.core.handler.Disruptor;
 import com.fuheryu.core.handler.Handler;
 import com.fuheryu.core.handler.HttpHandler;
 import com.fuheryu.core.http.Session;
@@ -18,7 +20,6 @@ public class Server {
 
     private static Server singleServer;
     private AtomicBoolean listenning = new AtomicBoolean(true);
-    private Handler handler;
     private Session session;
     private long connectionCount = 0;
 
@@ -34,11 +35,6 @@ public class Server {
         return singleServer;
     }
 
-    public Server setHandler(Handler handler) {
-
-        this.handler = handler;
-        return this;
-    }
 
     public void start() {
         new Thread(
@@ -65,7 +61,9 @@ public class Server {
                                 if(key.isReadable() && key.isValid()) {
                                     key.attach(connectionCount ++);
                                     key.cancel();
-                                    handler.onRead(key);
+
+                                    // 接受SelectionKey
+                                    Disruptor.receive(key);
                                 }
                             }
                         }
@@ -92,7 +90,6 @@ public class Server {
 
     public static void main(String[] arg) {
         Server s = Server.initServer(8099);
-        s.setHandler(HttpHandler.createHander());
 
         s.start();
 

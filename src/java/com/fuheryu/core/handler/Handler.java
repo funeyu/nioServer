@@ -7,6 +7,6 @@ import java.nio.channels.SelectionKey;
  */
 public interface Handler {
 
-    public void onRead(SelectionKey selectionKey);
+    void onRead();
 
 }
