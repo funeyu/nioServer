@@ -11,3 +11,7 @@
 一个helloworld 的回复
 webbench -c 20 -t 10 http://localhost:8099/hello
 并发20个请求，每秒可以请求2k左右的请求，貌似有点低啊！！！！
+
+## todo
+熟悉netty的原理，比较其性能优越处
+支持post请求
