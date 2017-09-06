@@ -34,6 +34,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="Maven: me.zzp:jactiverecord:2.3" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-all:4.0.24.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-all:4.1.15.Final" level="project" />
   </component>
 </module>
