@@ -1,4 +1,4 @@
-package com.fuheryu.controller;
+package com.fuheryu.core;
 
 import com.fuheryu.core.http.Context;
 

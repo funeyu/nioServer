@@ -2,6 +2,7 @@ package com.fuheryu.core.buffer;
 
 
 import com.fuheryu.core.connection.Connection;
+import io.netty.channel.ChannelFuture;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created by fuheyu on 2017/8/13.
@@ -39,6 +41,10 @@ public class ChannelBuffer {
     public int read() {
         try {
             readed = sc.read(container);
+            byte[] bytes = new byte[readed];
+            container.get(bytes, 0, readed);
+
+            System.out.print(new String(bytes, StandardCharsets.UTF_8));
             return readed;
         } catch (IOException e) {
             e.printStackTrace();
@@ -80,10 +86,41 @@ public class ChannelBuffer {
         return null;
     }
 
+    public byte[] remaining() {
+
+        if(readed < container.limit()) {
+            byte[] b = new byte[container.remaining()];
+            container.get(b);
+            System.out.print(new String(b, StandardCharsets.UTF_8));
+            return b;
+        }
+
+        return null;
+    }
+
     private void increaseReaded(String line) {
         if(line != null) {
             this.readed += (line.getBytes().length + 1);
         }
+    }
+
+    /**
+     * 跳出空行
+     */
+    private void skipEmptyLine() {
+        try {
+            String line = this.reader.readLine();
+            this.increaseReaded(line);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private ChannelBuffer forward() {
+
+        this.container.position(this.readed);
+        return this;
     }
 
 }

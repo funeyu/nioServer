@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.fuheryu.controller.ControllerMethod;
+import com.fuheryu.core.ControllerMethod;
 
 /**
  * Created by fuheyu on 2017/8/1.

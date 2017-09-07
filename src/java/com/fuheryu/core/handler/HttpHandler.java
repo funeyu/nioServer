@@ -93,8 +93,15 @@ public class HttpHandler implements Handler {
             Response res = Response.init(connection);
             Context context = Context.init(req, res);
 
+            // 解析请求头
             parseHeader(context, headers);
 
+            // 这里处理post的请求
+            if(context.getReq().getMethod().equals("POST")) {
+
+                cb.remaining();
+
+            }
             byte[] results = Router.use(context);
 
 

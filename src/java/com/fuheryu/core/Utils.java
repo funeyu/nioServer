@@ -1,6 +1,5 @@
 package com.fuheryu.core;
 
-import com.fuheryu.controller.ControllerMethod;
 import com.fuheryu.core.annotation.AnnotationFactory.RouterMapping;
 
 import java.io.File;

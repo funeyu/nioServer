@@ -22,6 +22,11 @@ public class UrlParser extends ParserBase {
             context.getReq().setHttpVersion(slices[2]);
 
             super.next(context, headerMap);
+        } else if((url = headerMap.get("POST")) != null) {
+            String[] slices = url.split(" ");
+            context.getReq().setMethod(slices[0]);
+            context.getReq().parseUrl(slices[1]);
+            context.getReq().setHttpVersion(slices[2]);
         }
     }
 }

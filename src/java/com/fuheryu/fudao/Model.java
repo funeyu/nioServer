@@ -45,6 +45,7 @@ public abstract class Model {
      */
    public static <T extends Model> T findOne(Class<T> clazz, String query) {
 
+
        return ModelDelegate.findOne(clazz, query);
    }
 
