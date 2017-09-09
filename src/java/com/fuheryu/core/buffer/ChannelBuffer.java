@@ -43,7 +43,7 @@ public class ChannelBuffer {
             readed = sc.read(container);
             byte[] bytes = container.array();
 
-            System.out.print(new String(bytes, StandardCharsets.UTF_8));
+//            System.out.print(new String(bytes, StandardCharsets.UTF_8));
             return readed;
         } catch (IOException e) {
             e.printStackTrace();

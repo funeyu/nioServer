@@ -1,5 +1,7 @@
 package com.fuheryu.core.handler;
 
+import io.netty.handler.codec.http.HttpHeaders;
+
 import java.nio.channels.SelectionKey;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -17,12 +19,15 @@ public class Worker implements Runnable{
 
     private SelectionKey selectionKey;
 
+    private Handler handler;
+
     private AtomicBoolean stop = new AtomicBoolean(false);
 
     public Worker(int id, Object lock) {
 
         this.id = id;
         this.lock = lock;
+        this.handler = HttpHandler.createHander();
     }
 
     /**
@@ -39,8 +44,7 @@ public class Worker implements Runnable{
      */
     private void doWork() {
 
-        Handler handler = HttpHandler.createHander(selectionKey);
-        handler.onRead();
+        handler.onRead(selectionKey);
     }
 
     @Override
