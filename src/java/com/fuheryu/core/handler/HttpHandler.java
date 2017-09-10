@@ -29,15 +29,11 @@ public class HttpHandler implements Handler {
     private final  Charset charset = Charset.forName("UTF-8");
     private final  CharsetEncoder encoder = charset.newEncoder();
     private final static int HEADER_BUFFFER_SIZE = 8192;
-    private SelectionKey selectionKey;
 
     // header解析链
     private final static ParserBase headerParserChain = new CookieParser(new UrlParser(null));
 
-    private HttpHandler(SelectionKey key){
-
-        this.selectionKey = key;
-    }
+    private HttpHandler(){}
 
     /*
         从request中提取出 header的数组
@@ -63,7 +59,7 @@ public class HttpHandler implements Handler {
     }
 
     @Override
-    public void onRead() {
+    public void onRead(SelectionKey selectionKey) {
 
         try {
             SocketChannel sc = (SocketChannel) selectionKey.channel();
@@ -106,11 +102,14 @@ public class HttpHandler implements Handler {
 
 
             context.getRes().setContent(results);
-            if(context.getReq().getAccept() != null) {
-                context.getRes().sendJSON();
-            } else {
-                context.getRes().sendJSON();
-            }
+
+            context.getRes().send();
+
+//            if(context.getReq().getAccept() != null) {
+//                context.getRes().sendJSON();
+//            } else {
+//                context.getRes().sendJSON();
+//            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -118,8 +117,9 @@ public class HttpHandler implements Handler {
 
     }
 
-    public static Handler createHander(SelectionKey key) {
-        Handler h = new HttpHandler(key);
+    public static Handler createHander() {
+
+        Handler h = new HttpHandler();
         return h;
     }
 

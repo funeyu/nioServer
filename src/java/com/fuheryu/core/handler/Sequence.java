@@ -47,4 +47,31 @@ public final class Sequence {
         UNSAFE.putOrderedLong(paddedValue, VALUE_OFFSET, value);
     }
 
+    public long increase() {
+
+        long current = get();
+        compareAndSet(current, current + 1);
+
+        return current + 1;
+    }
+
+    /**
+     * 依次累加，直到找到一个合适的current值，如果到RingBuffer的cursor就直接返回-1
+     * @param cursor RingBuffer的cursor
+     * @return
+     */
+    public long skipAndGet(Sequence cursor) {
+
+        long current = get();
+        System.out.println("skip" + cursor.get());
+        do {
+            if(current >= cursor.get()) {
+                return -1;
+            }
+            System.out.println("++++111:" + current);
+            current = current + 1;
+        } while(compareAndSet(current -1, current));
+
+        return current;
+    }
 }

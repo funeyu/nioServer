@@ -5,32 +5,84 @@ package com.fuheryu.core.handler;
  */
 public final class RingBuffer<E> {
 
-    private static int INITIAL_VALUE = 0;
-
     private final int bufferSize;
 
     private final Object[] entries;
 
-    private final Sequence sequence;
+    // 标识生产者所在的Sequence
+    private final Sequence cursor;
 
-    RingBuffer(EventFactory<E> factory, int size, Sequence sequence) {
+    // 标识消费者最前的Sequence
+    private final Sequence leading;
+
+    RingBuffer(int size) {
 
         this.bufferSize = size;
-        this.sequence = sequence;
+        this.cursor = new Sequence();
+        this.leading = new Sequence();
         entries = new Object[size];
 
     }
 
     public long getCurrentCursor() {
 
-        return sequence.get();
+        return cursor.get();
     }
 
-    public E getEntry(long l) {
+    private E getEntry(long l) {
+
 
         int index = (int)(l % bufferSize);
         return (E)entries[index];
     }
 
+    /**
+     * 获取RingBuffer上的条目
+     * @return
+     */
+    public E haltForEntry() {
+
+        long gotJobIndex = leading.skipAndGet(cursor);
+        if(gotJobIndex == -1L) {
+            return null;
+        }
+
+        return getEntry(gotJobIndex);
+    }
+
+    /**
+     * 返回RingBuffer的生产者最新的Job 序列号
+     * @return
+     */
+    public long getLeading() {
+
+        return leading.get();
+    }
+
+    private void addEntry(E e) {
+
+
+        long l = this.cursor.increase();
+        int index = (int)(l % bufferSize);
+        entries[index] = e;
+    }
+
+    /**
+     * 往RingBuffer里添加条目
+     * @param e
+     */
+    public boolean addHaltEntry(E e) {
+
+        long leading = getLeading();
+        long cursor = getCurrentCursor();
+
+        // 标识添加job太快，workers也满负荷，这时候直接返回false
+        if(cursor >= (leading + bufferSize)) {
+            return false;
+        }
+
+        addEntry(e);
+        return true;
+    }
 
 }

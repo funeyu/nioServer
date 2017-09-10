@@ -1,6 +1,7 @@
 package com.fuheryu.core;
 
 import com.fuheryu.core.annotation.AnnotationFactory.RouterMapping;
+import com.fuheryu.core.handler.Worker;
 import sun.misc.Unsafe;
 
 import java.io.File;

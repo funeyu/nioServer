@@ -8,53 +8,52 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class Worker implements Runnable{
 
-    // 这个id和分片锁的index对应
-    private final int id;
+    private final RingBuffer<SelectionKey> ringBuffer;
 
-    private final Object lock;
+    private AtomicBoolean running = new AtomicBoolean(true);
 
-    private final Object pendingLock = new Object();
+    private final Handler httpHandler;
 
-    private SelectionKey selectionKey;
 
-    private AtomicBoolean stop = new AtomicBoolean(false);
+    public Worker(RingBuffer<SelectionKey> ringBuffer) {
 
-    public Worker(int id, Object lock) {
-
-        this.id = id;
-        this.lock = lock;
+        this.ringBuffer = ringBuffer;
+        this.httpHandler = HttpHandler.createHander();
     }
 
-    /**
-     * 唤醒阻塞线程
-     */
-    public synchronized void wakeUp(SelectionKey selectionKey) {
-
-        this.selectionKey = selectionKey;
-        this.notify();
-    }
 
     /**
      * 真正处理request请求的地方
      */
-    private void doWork() {
+    private void doWork(SelectionKey selectionKey) {
 
-        Handler handler = HttpHandler.createHander(selectionKey);
-        handler.onRead();
+        httpHandler.onRead(selectionKey);
     }
 
     @Override
     public void run() {
-        while(!stop.get()) {
-            synchronized (this) {
-                try {
-                    this.wait();
-                    this.doWork();
 
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+//        long leadingCursor;  // 代表worker抢占到的任务index
+//        long jobCursor;      // 代表分发job的index，
+//                             // 如果 jobCursor == workingCursor则代表job分发的慢，worker处于饥饿状态
+//                             // 如果 (jobCursor + RingBuffer.size) == workingCursor则代表job分发过快，worker工作饱和了
+
+        while(true) {
+            if(running.get()) {
+
+                SelectionKey job = ringBuffer.haltForEntry();
+                if(job == null) {
+                    try {
+                        Thread.sleep(1);
+                        continue;
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
+
+                doWork(job);
             }
         }
     }
+
 }
