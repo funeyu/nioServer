@@ -40,6 +40,11 @@ public class Response {
 
     public void send() {
 
+        if(!conn.isOpen()) {
+
+            return;
+        }
+
         addDefaultHeaders();
 
         ArrayList<ByteBuffer> buffersList = new ArrayList<>();

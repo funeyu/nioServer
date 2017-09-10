@@ -3,6 +3,8 @@ package com.fuheryu.core.handler;
 import com.fuheryu.core.Utils;
 import sun.misc.Unsafe;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * Created by fuheyu on 2017/9/9.
  */
@@ -13,6 +15,8 @@ public final class Sequence {
     private static final Unsafe UNSAFE;
 
     private static final long VALUE_OFFSET;
+
+    private final ReentrantLock lock = new ReentrantLock();
 
     static {
         UNSAFE = Utils.getUnsafe();
@@ -63,7 +67,6 @@ public final class Sequence {
     public long skipAndGet(Sequence cursor) {
 
         long current = get();
-        System.out.println("skip" + cursor.get());
         do {
             if(current >= cursor.get()) {
                 return -1;

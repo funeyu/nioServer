@@ -76,6 +76,10 @@ public class HttpHandler implements Handler {
 
             cb = connection.getChannelBuffer();
 
+            if(!connection.isOpen()) {
+                return;
+            }
+
             if(cb.read() < 1) {  // 关闭channel
                 connection.close();
                 return;

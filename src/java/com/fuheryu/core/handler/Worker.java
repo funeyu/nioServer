@@ -33,11 +33,6 @@ public class Worker implements Runnable{
     @Override
     public void run() {
 
-//        long leadingCursor;  // 代表worker抢占到的任务index
-//        long jobCursor;      // 代表分发job的index，
-//                             // 如果 jobCursor == workingCursor则代表job分发的慢，worker处于饥饿状态
-//                             // 如果 (jobCursor + RingBuffer.size) == workingCursor则代表job分发过快，worker工作饱和了
-
         while(true) {
             if(running.get()) {
 
@@ -51,6 +46,7 @@ public class Worker implements Runnable{
                     }
                 }
 
+                System.out.println("run job:" + job);
                 doWork(job);
             }
         }

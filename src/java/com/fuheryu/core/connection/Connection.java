@@ -49,6 +49,15 @@ public class Connection {
         close();    // 这里不close client端就得不到数据
     }
 
+    /**
+     * 检查SelectionKey是否是open
+     * @return
+     */
+    public boolean isOpen() {
+
+        return sk.channel().isOpen();
+    }
+
     public ChannelBuffer getChannelBuffer() {
         return cb;
     }

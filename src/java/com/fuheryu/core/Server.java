@@ -62,6 +62,7 @@ public class Server {
                                     key.attach(connectionCount ++);
                                     key.cancel();
 
+                                    System.out.println("connectionCount:" + connectionCount);
                                     // 接受SelectionKey
                                     Disruptor.receive(key);
                                 }
@@ -89,6 +90,7 @@ public class Server {
     }
 
     public static void main(String[] arg) {
+
         Server s = Server.initServer(8099);
 
         s.start();
