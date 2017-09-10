@@ -46,7 +46,6 @@ public class Worker implements Runnable{
                     }
                 }
 
-                System.out.println("run job:" + job);
                 doWork(job);
             }
         }

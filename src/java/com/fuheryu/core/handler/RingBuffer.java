@@ -62,7 +62,6 @@ public final class RingBuffer<E> {
     private void addEntry(E e) {
 
         long l = this.cursor.increase();
-        System.out.println("addEntry:" + l + e.toString());
         int index = (int)(l % bufferSize);
         entries[index] = e;
     }

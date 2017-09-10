@@ -22,7 +22,7 @@ public final class Sequence {
         UNSAFE = Utils.getUnsafe();
         final int base = UNSAFE.arrayBaseOffset(long[].class);
         final int scale = UNSAFE.arrayIndexScale(long[].class);
-        VALUE_OFFSET = base + (scale + 7);
+        VALUE_OFFSET = base + (scale * 7);
     }
 
     private final long[] paddedValue = new long[15];
@@ -66,15 +66,15 @@ public final class Sequence {
      */
     public long skipAndGet(Sequence cursor) {
 
-        long current = get();
+        long current;
         do {
+            current = get();
             if(current >= cursor.get()) {
                 return -1;
             }
-            System.out.println("++++111:" + current);
-            current = current + 1;
-        } while(compareAndSet(current -1, current));
 
-        return current;
+        } while(!compareAndSet(current, current + 1));
+
+        return current + 1;
     }
 }

@@ -41,9 +41,6 @@ public class ChannelBuffer {
     public int read() {
         try {
             readed = sc.read(container);
-            byte[] bytes = container.array();
-
-            System.out.print(new String(bytes, StandardCharsets.UTF_8));
             return readed;
         } catch (IOException e) {
             e.printStackTrace();
@@ -90,7 +87,6 @@ public class ChannelBuffer {
         if(readed < container.limit()) {
             byte[] b = new byte[container.remaining()];
             container.get(b);
-            System.out.print(new String(b, StandardCharsets.UTF_8));
             return b;
         }
 
