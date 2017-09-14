@@ -39,7 +39,7 @@ public class Worker implements Runnable{
                 SelectionKey job = ringBuffer.haltForEntry();
                 if(job == null) {
                     try {
-                        Thread.sleep(1);
+                        Thread.sleep(0, 10);
                         continue;
                     } catch (InterruptedException e) {
                         e.printStackTrace();
