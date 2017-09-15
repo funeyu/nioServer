@@ -37,16 +37,18 @@ public class Worker implements Runnable{
             if(running.get()) {
 
                 SelectionKey job = ringBuffer.haltForEntry();
-                if(job == null) {
-                    try {
-                        Thread.sleep(0, 10);
-                        continue;
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
+//                if(job == null) {
+//                    try {
+//                        Thread.sleep(0, 1);
+//                        continue;
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
 
-                doWork(job);
+                if(job != null) {
+                    doWork(job);
+                }
             }
         }
     }

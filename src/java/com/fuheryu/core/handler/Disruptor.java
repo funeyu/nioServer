@@ -15,7 +15,8 @@ public final class Disruptor {
     static {
         ringBuffer = new RingBuffer(1024);
 
-        int processors = Runtime.getRuntime().availableProcessors() - 1;
+//        int processors = Runtime.getRuntime().availableProcessors() - 1;
+        int processors = 2;
         workers =  new Worker[processors];
         for(int i = 0; i < processors; i ++) {
             workers[i] = new Worker(ringBuffer);
@@ -31,13 +32,7 @@ public final class Disruptor {
      */
     public static void receive(SelectionKey selectionKey) {
 
-        while(!ringBuffer.addHaltEntry(selectionKey)) { // 没添加成功
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        ringBuffer.addHaltEntry(selectionKey);
     }
 
 }

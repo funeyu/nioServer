@@ -37,12 +37,30 @@ public final class RingBuffer<E> {
     }
 
     /**
+     * 依次累加，获取一个待处理的index
+     * @return
+     */
+    private long getIndex() {
+
+        long current;
+        do {
+            current = leading.get();
+            if(current >= cursor.get()) {
+                return -1;
+            }
+
+        } while(!leading.compareAndSet(current, current + 1));
+
+        return current + 1;
+    }
+
+    /**
      * 获取RingBuffer上的条目
      * @return
      */
     public E haltForEntry() {
 
-        long gotJobIndex = leading.skipAndGet(cursor);
+        long gotJobIndex = getIndex();
         if(gotJobIndex == -1L) {
             return null;
         }
@@ -67,21 +85,29 @@ public final class RingBuffer<E> {
     }
 
     /**
-     * 往RingBuffer里添加条目
-     * @param e
+     * 判断是生产者否超前一轮圈
+     * @return
      */
-    public boolean addHaltEntry(E e) {
+    private boolean headOneRing() {
 
         long leading = getLeading();
         long cursor = getCurrentCursor();
 
-        // 标识添加job太快，workers也满负荷，这时候直接返回false
-        if(cursor >= (leading + bufferSize)) {
-            return false;
+        return cursor >= (leading + bufferSize);
+    }
+
+    /**
+     * 往RingBuffer里添加条目，阻塞住如果RingBuffer上生产者超前消费者一圈
+     * @param e
+     */
+    public void addHaltEntry(E e) {
+
+
+        while(headOneRing()) {
+            // 自旋等待
         }
 
         addEntry(e);
-        return true;
     }
 
 }

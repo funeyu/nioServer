@@ -59,22 +59,4 @@ public final class Sequence {
         return current + 1;
     }
 
-    /**
-     * 依次累加，直到找到一个合适的current值，如果到RingBuffer的cursor就直接返回-1
-     * @param cursor RingBuffer的cursor
-     * @return
-     */
-    public long skipAndGet(Sequence cursor) {
-
-        long current;
-        do {
-            current = get();
-            if(current >= cursor.get()) {
-                return -1;
-            }
-
-        } while(!compareAndSet(current, current + 1));
-
-        return current + 1;
-    }
 }
