@@ -16,7 +16,7 @@ public final class Disruptor {
         ringBuffer = new RingBuffer(1024);
 
 //        int processors = Runtime.getRuntime().availableProcessors() - 1;
-        int processors = 2;
+        int processors = 4;
         workers =  new Worker[processors];
         for(int i = 0; i < processors; i ++) {
             workers[i] = new Worker(ringBuffer);

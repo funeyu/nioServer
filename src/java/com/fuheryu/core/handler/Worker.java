@@ -2,6 +2,7 @@ package com.fuheryu.core.handler;
 
 import java.nio.channels.SelectionKey;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.LockSupport;
 
 /**
  * Created by fuheyu on 2017/8/31.
@@ -37,14 +38,9 @@ public class Worker implements Runnable{
             if(running.get()) {
 
                 SelectionKey job = ringBuffer.haltForEntry();
-//                if(job == null) {
-//                    try {
-//                        Thread.sleep(0, 1);
-//                        continue;
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
+                if(job == null) {
+                    LockSupport.parkNanos(1);
+                }
 
                 if(job != null) {
                     doWork(job);

@@ -1,5 +1,7 @@
 package com.fuheryu.core.handler;
 
+import java.util.concurrent.locks.LockSupport;
+
 /**
  * Created by fuheyu on 2017/9/9.
  */
@@ -102,9 +104,10 @@ public final class RingBuffer<E> {
      */
     public void addHaltEntry(E e) {
 
-
         while(headOneRing()) {
             // 自旋等待
+            System.out.println("cursor" + this.cursor.get());
+            LockSupport.parkNanos(1);
         }
 
         addEntry(e);
