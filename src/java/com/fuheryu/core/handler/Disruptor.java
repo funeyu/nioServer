@@ -12,6 +12,8 @@ public final class Disruptor {
 
     private final static RingBuffer ringBuffer;
 
+    private static int count =0;
+
     static {
         ringBuffer = new RingBuffer(1024);
 
@@ -32,7 +34,11 @@ public final class Disruptor {
      */
     public static void receive(SelectionKey selectionKey) {
 
+        count ++;
+
         ringBuffer.addHaltEntry(selectionKey);
+
+        System.out.println("receive:" + count);
     }
 
 }

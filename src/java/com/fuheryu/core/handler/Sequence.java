@@ -16,8 +16,6 @@ public final class Sequence {
 
     private static final long VALUE_OFFSET;
 
-    private final ReentrantLock lock = new ReentrantLock();
-
     static {
         UNSAFE = Utils.getUnsafe();
         final int base = UNSAFE.arrayBaseOffset(long[].class);
@@ -51,6 +49,10 @@ public final class Sequence {
         UNSAFE.putOrderedLong(paddedValue, VALUE_OFFSET, value);
     }
 
+    /**
+     * 这里是单线程的生产者，所以不需要循坏cas
+     * @return
+     */
     public long increase() {
 
         long current = get();

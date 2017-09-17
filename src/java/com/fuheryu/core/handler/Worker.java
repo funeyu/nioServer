@@ -15,11 +15,16 @@ public class Worker implements Runnable{
 
     private final Handler httpHandler;
 
+    private final static long INITIAL_VALUE = -1L;
+
+    private long current;
+
 
     public Worker(RingBuffer<SelectionKey> ringBuffer) {
 
         this.ringBuffer = ringBuffer;
         this.httpHandler = HttpHandler.createHander();
+        this.current = INITIAL_VALUE;
     }
 
 
@@ -31,13 +36,25 @@ public class Worker implements Runnable{
         httpHandler.onRead(selectionKey);
     }
 
+
+    public long getCurrent() {
+
+        return this.current;
+    }
+
+    public Worker increase() {
+
+        this.current ++;
+        return this;
+    }
+
     @Override
     public void run() {
 
         while(true) {
             if(running.get()) {
 
-                SelectionKey job = ringBuffer.haltForEntry();
+                SelectionKey job = ringBuffer.haltForEntry(this);
                 if(job == null) {
                     LockSupport.parkNanos(1);
                 }

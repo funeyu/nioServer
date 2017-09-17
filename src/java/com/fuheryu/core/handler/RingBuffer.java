@@ -14,16 +14,15 @@ public final class RingBuffer<E> {
     // 标识生产者所在的Sequence
     private final Sequence cursor;
 
-    // 标识消费者最前的Sequence
-    private final Sequence leading;
+    // 标识消费者所处的Sequence
+    private final Sequence current;
 
     RingBuffer(int size) {
 
         this.bufferSize = size;
         this.cursor = new Sequence();
-        this.leading = new Sequence();
+        this.current = new Sequence();
         entries = new Object[size];
-
     }
 
     public long getCurrentCursor() {
@@ -40,29 +39,33 @@ public final class RingBuffer<E> {
 
     /**
      * 依次累加，获取一个待处理的index
+     * @param worker 为消费者
      * @return
      */
-    private long getIndex() {
+    private long getIndex(Worker worker) {
 
-        long current;
+        long workerCurrent;
+
         do {
-            current = leading.get();
-            if(current >= cursor.get()) {
+            workerCurrent =  worker.getCurrent();
+            if(workerCurrent >= cursor.get()) {
                 return -1;
             }
 
-        } while(!leading.compareAndSet(current, current + 1));
+            worker.increase();
 
-        return current + 1;
+        } while(!current.compareAndSet(workerCurrent, workerCurrent + 1));
+
+        return workerCurrent + 1;
     }
 
     /**
      * 获取RingBuffer上的条目
      * @return
      */
-    public E haltForEntry() {
+    public E haltForEntry(Worker worker) {
 
-        long gotJobIndex = getIndex();
+        long gotJobIndex = getIndex(worker);
         if(gotJobIndex == -1L) {
             return null;
         }
@@ -76,12 +79,12 @@ public final class RingBuffer<E> {
      */
     public long getLeading() {
 
-        return leading.get();
+        return current.get();
     }
 
     private void addEntry(E e) {
 
-        long l = this.cursor.increase();
+        long l = cursor.increase();
         int index = (int)(l % bufferSize);
         entries[index] = e;
     }
@@ -106,7 +109,6 @@ public final class RingBuffer<E> {
 
         while(headOneRing()) {
             // 自旋等待
-            System.out.println("cursor" + this.cursor.get());
             LockSupport.parkNanos(1);
         }
 
