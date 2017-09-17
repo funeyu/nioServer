@@ -103,9 +103,9 @@ public class HttpHandler implements Handler {
 
             context.getRes().setContent(results);
             if(context.getReq().getAccept() != null) {
-                context.getRes().sendJSON();
+                context.getRes().send();
             } else {
-                context.getRes().sendJSON();
+                context.getRes().send();
             }
 
         } catch (Exception e) {
