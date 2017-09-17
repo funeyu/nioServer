@@ -55,7 +55,7 @@ public final class RingBuffer<E> {
             worker.increase();
 
         } while(!current.compareAndSet(workerCurrent, workerCurrent + 1));
-        System.out.println("cursor:" + worker.getCurrent());
+//        System.out.println("cursor:" + worker.getCurrent());
         return workerCurrent + 1;
     }
 

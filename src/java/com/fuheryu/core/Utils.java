@@ -201,4 +201,16 @@ public class Utils {
         return THE_UNSAFE;
     }
 
+    public static long tailSquence(Worker[] workers) {
+
+        long res = Long.MAX_VALUE;
+        for(Worker w : workers) {
+            if(res < w.getCurrent()) {
+                res = w.getCurrent();
+            }
+        }
+
+        return res;
+    }
+
 }
