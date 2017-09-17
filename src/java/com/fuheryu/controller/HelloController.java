@@ -17,7 +17,6 @@ public class HelloController {
 //        DemoService service = (DemoService) ServiceFactory.one(DemoService.class);
 
 //        return service.queryByNumber(200);
-
         try {
             Thread.sleep(1, 10);
         } catch (InterruptedException e) {

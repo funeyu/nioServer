@@ -37,8 +37,6 @@ public final class Disruptor {
         count ++;
 
         ringBuffer.addHaltEntry(selectionKey);
-
-        System.out.println("receive:" + count);
     }
 
 }

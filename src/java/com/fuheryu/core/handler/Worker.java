@@ -56,7 +56,8 @@ public class Worker implements Runnable{
 
                 SelectionKey job = ringBuffer.haltForEntry(this);
                 if(job == null) {
-                    LockSupport.parkNanos(1);
+//                    LockSupport.parkNanos(1);
+                    continue;
                 }
 
                 if(job != null) {
