@@ -42,7 +42,7 @@ public class Server {
                     try {
                         while(listenning.get()) {
                             int n = session.getSelector().select();
-                            if(n == 0) { // 没有指定的I/O事件发生
+                            if(n == 0) { // 没有指定的I/O事件发生, 如果这里一直continue，会造成cpu飙高
                                 continue;
                             }
 
