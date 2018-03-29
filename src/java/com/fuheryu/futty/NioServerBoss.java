@@ -1,9 +1,7 @@
 package com.fuheryu.futty;
 
 import java.io.IOException;
-import java.nio.channels.Channel;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
+import java.nio.channels.*;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.Executor;
@@ -41,9 +39,22 @@ public final class NioServerBoss extends AbstractNioSelector implements Boss{
             SelectionKey k = i.next();
             i.remove();
 
-            Channel channel = (Channel) k.attachment();
+            ServerSocketChannel channel = (ServerSocketChannel) k.attachment();
 
-
+            try {
+                SocketChannel acceptedSocket = channel.accept();
+                if(acceptedSocket == null) {
+                    break;
+                }
+            } catch (CancelledKeyException e) {
+                k.cancel();
+                channel.close();
+            }
         }
+    }
+
+
+    private static void registerAcceptedChannel() {
+
     }
 }
