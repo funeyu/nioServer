@@ -48,6 +48,8 @@ public abstract class AbstractNioWorker extends AbstractNioSelector implements W
             SelectionKey k = i.next();
             i.remove();
 
+
+            System.out.println("process worker");
             try {
                 int readyOps = k.readyOps();
                 if((readyOps & SelectionKey.OP_READ) != 0 || readyOps == 0) {

@@ -1,6 +1,8 @@
 package com.fuheryu.futty;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.nio.channels.*;
 import java.util.Iterator;
 import java.util.Set;
@@ -20,7 +22,24 @@ public final class NioServerBoss extends AbstractNioSelector implements Boss{
 
     @Override
     protected Runnable createRegisterTask(Channel channel, ChannelFuture channelFuture) {
-        return null;
+
+        System.out.println("register task");
+
+        return new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ServerSocketChannel ssc = (ServerSocketChannel) channel;
+                    SocketChannel socketChannel = ssc.accept();
+                    socketChannel.configureBlocking(false);
+
+                    NioServerWorker worker = NioServerWorkerFactory.next();
+                    worker.register(socketChannel, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
     }
 
     @Override
@@ -39,8 +58,9 @@ public final class NioServerBoss extends AbstractNioSelector implements Boss{
             SelectionKey k = i.next();
             i.remove();
 
-            ServerSocketChannel channel = (ServerSocketChannel) k.attachment();
+            ServerSocketChannel channel = (ServerSocketChannel) k.channel();
 
+            register(channel, null);
             try {
                 SocketChannel acceptedSocket = channel.accept();
                 if(acceptedSocket == null) {
@@ -56,5 +76,21 @@ public final class NioServerBoss extends AbstractNioSelector implements Boss{
 
     private static void registerAcceptedChannel() {
 
+    }
+
+    public void bind(InetSocketAddress inetSocketAddress) {
+        if(inetSocketAddress == null) {
+            return ;
+        }
+
+        try {
+            ServerSocketChannel ssc = ServerSocketChannel.open();
+            ssc.configureBlocking(false);
+            ssc.socket().bind(inetSocketAddress);
+            ssc.register(this.selector, SelectionKey.OP_ACCEPT);
+            new Thread(this).start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

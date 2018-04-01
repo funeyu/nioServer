@@ -1,15 +1,15 @@
 package com.fuheryu.futty;
 
+import com.sun.org.apache.bcel.internal.generic.Select;
+
 import java.io.IOError;
 import java.io.IOException;
 import java.nio.channels.Channel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
-import java.util.concurrent.RejectedExecutionException;
+import java.util.Set;
+import java.util.concurrent.*;
 
 public abstract class AbstractNioSelector implements NioSelector {
 
@@ -23,6 +23,7 @@ public abstract class AbstractNioSelector implements NioSelector {
 
     public AbstractNioSelector(Executor executor, Thread thread) {
         this.executor = executor;
+        this.openSelector();
     }
     public void register(Channel channel, ChannelFuture channelFuture) {
         Runnable task = createRegisterTask(channel, channelFuture);
@@ -62,7 +63,41 @@ public abstract class AbstractNioSelector implements NioSelector {
 
     }
 
-    public void run() {}
+    public void run() {
+        for(;;) {
+            try {
+                int i = this.selector.select();
+                if(i == 0) {
+                    // 这里出现了epoll空转的bug
+                    continue;
+                }
+
+                processTaskQueue();
+                process(this.selector);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void processTaskQueue() {
+        for(;;) {
+            final Runnable task = taskQueue.poll();
+            if(task == null) {
+                break;
+            }
+            task.run();
+        }
+    }
+
+    private void openSelector() {
+        try {
+            selector = Selector.open();
+//            new Thread(this).start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     protected abstract Runnable createRegisterTask(Channel channel, ChannelFuture channelFuture);
 
