@@ -1,6 +1,12 @@
 package com.fuheryu.futty;
 
+import io.netty.channel.ServerChannel;
+
+import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
 import java.nio.channels.Channel;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
@@ -15,12 +21,27 @@ public class NioServerWorker extends AbstractNioWorker{
 
     @Override
     protected boolean read(SelectionKey k) {
-
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
         if(k.isReadable()) {
             System.out.println("readddd");
+
+            SocketChannel sc = (SocketChannel) k.channel();
+            int count;
+            try {
+                while((count = sc.read(buffer)) > 0) {
+
+                }
+
+                if(count < 0) { // 这里是客户端主动关闭channel
+                    sc.close();
+                }
+            } catch (IOException e) {
+
+            }
             return true;
         }
 
+        System.out.println("reeeeddd false");
         return false;
 
     }

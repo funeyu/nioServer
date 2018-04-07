@@ -13,7 +13,7 @@ import java.util.concurrent.*;
 
 public abstract class AbstractNioSelector implements NioSelector {
 
-    private final Queue<Runnable> taskQueue = new ConcurrentLinkedQueue<Runnable>();
+    protected final Queue<Runnable> taskQueue = new ConcurrentLinkedQueue<Runnable>();
     protected volatile Selector selector;
     private final Executor executor;
     protected volatile Thread thread;

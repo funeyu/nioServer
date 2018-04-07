@@ -9,7 +9,7 @@ public class NioServerWorkerFactory {
     private static NioServerWorker[] workers = new NioServerWorker[4];
 
     static {
-        for(int i = 0; i < 3; i ++) {
+        for(int i = 0; i < 4; i ++) {
             workers[i] = new NioServerWorker(new Executor() {
                 @Override
                 public void execute(Runnable command) {
@@ -22,7 +22,7 @@ public class NioServerWorkerFactory {
 
     public static NioServerWorker next() {
         long id = increment.incrementAndGet();
-        return workers[Math.toIntExact(id % 4)];
+        return workers[(int)(id % 4)];
     }
 
 }

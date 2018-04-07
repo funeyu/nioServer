@@ -44,11 +44,19 @@ public abstract class AbstractNioWorker extends AbstractNioSelector implements W
         if(selectedKeys.isEmpty()) {
             return ;
         }
+        System.out.println("process");
         for(Iterator<SelectionKey> i = selectedKeys.iterator(); i.hasNext();) {
             SelectionKey k = i.next();
             i.remove();
 
-
+            if(!k.isValid()) {
+                return ;
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             System.out.println("process worker");
             try {
                 int readyOps = k.readyOps();

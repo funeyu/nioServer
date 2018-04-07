@@ -7,6 +7,7 @@ import java.nio.channels.*;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.Executor;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by fuheyu on 2018/3/28.
@@ -14,6 +15,8 @@ import java.util.concurrent.Executor;
 public final class NioServerBoss extends AbstractNioSelector implements Boss{
 
     NioServerBoss(Executor bossExecutor) {super(bossExecutor);}
+
+    private final AtomicBoolean isFirstStarted = new AtomicBoolean(true);
 
     @Override
     public void shutDown() {
@@ -29,12 +32,20 @@ public final class NioServerBoss extends AbstractNioSelector implements Boss{
             @Override
             public void run() {
                 try {
-                    ServerSocketChannel ssc = (ServerSocketChannel) channel;
-                    SocketChannel socketChannel = ssc.accept();
-                    socketChannel.configureBlocking(false);
+                    if(isFirstStarted.compareAndSet(true, false)) {
+                        System.out.println("boss runnable");
+                        ServerSocketChannel ssc = (ServerSocketChannel) channel;
 
-                    NioServerWorker worker = NioServerWorkerFactory.next();
-                    worker.register(socketChannel, null);
+                        for(;;) {
+                            SocketChannel socketChannel = ssc.accept();
+                            socketChannel.configureBlocking(false);
+                            if(socketChannel != null) {
+                                NioServerWorker worker = NioServerWorkerFactory.next();
+                                worker.register(socketChannel, null);
+                            }
+                        }
+
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -61,15 +72,15 @@ public final class NioServerBoss extends AbstractNioSelector implements Boss{
             ServerSocketChannel channel = (ServerSocketChannel) k.channel();
 
             register(channel, null);
-            try {
-                SocketChannel acceptedSocket = channel.accept();
-                if(acceptedSocket == null) {
-                    break;
-                }
-            } catch (CancelledKeyException e) {
-                k.cancel();
-                channel.close();
-            }
+//            try {
+//                SocketChannel acceptedSocket = channel.accept();
+//                if(acceptedSocket == null) {
+//                    break;
+//                }
+//            } catch (CancelledKeyException e) {
+//                k.cancel();
+//                channel.close();
+//            }
         }
     }
 
