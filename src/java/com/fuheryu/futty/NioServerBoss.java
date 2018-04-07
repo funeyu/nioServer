@@ -38,8 +38,8 @@ public final class NioServerBoss extends AbstractNioSelector implements Boss{
 
                         for(;;) {
                             SocketChannel socketChannel = ssc.accept();
-                            socketChannel.configureBlocking(false);
                             if(socketChannel != null) {
+                                socketChannel.configureBlocking(false);
                                 NioServerWorker worker = NioServerWorkerFactory.next();
                                 worker.register(socketChannel, null);
                             }

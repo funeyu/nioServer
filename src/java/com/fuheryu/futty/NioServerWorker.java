@@ -56,7 +56,12 @@ public class NioServerWorker extends AbstractNioWorker{
         } catch (ClosedChannelException e) {
             e.printStackTrace();
         }
-        return null;
+        return new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("worker runnable！");
+            }
+        };
     }
 
     @Override
