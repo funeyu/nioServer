@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.channels.Channel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.nio.channels.SocketChannel;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.*;
@@ -38,7 +39,7 @@ public abstract class AbstractNioSelector implements NioSelector {
         Selector selector = this.selector;
 
         if(selector != null) {
-            selector.wakeup();
+//            selector.wakeup();
         } else {
             if(taskQueue.remove(task)) {
                 throw new RejectedExecutionException("worker has already been shutdown!");

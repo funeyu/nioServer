@@ -31,24 +31,7 @@ public final class NioServerBoss extends AbstractNioSelector implements Boss{
         return new Runnable() {
             @Override
             public void run() {
-                try {
-                    if(isFirstStarted.compareAndSet(true, false)) {
-                        System.out.println("boss runnable");
-                        ServerSocketChannel ssc = (ServerSocketChannel) channel;
-
-                        for(;;) {
-                            SocketChannel socketChannel = ssc.accept();
-                            if(socketChannel != null) {
-                                socketChannel.configureBlocking(false);
-                                NioServerWorker worker = NioServerWorkerFactory.next();
-                                worker.register(socketChannel, null);
-                            }
-                        }
-
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                System.out.println("boss runnable!");
             }
         };
     }
@@ -72,15 +55,22 @@ public final class NioServerBoss extends AbstractNioSelector implements Boss{
             ServerSocketChannel channel = (ServerSocketChannel) k.channel();
 
             register(channel, null);
-//            try {
-//                SocketChannel acceptedSocket = channel.accept();
-//                if(acceptedSocket == null) {
-//                    break;
-//                }
-//            } catch (CancelledKeyException e) {
-//                k.cancel();
-//                channel.close();
-//            }
+            try {
+                for(;;) {
+                    SocketChannel acceptedSocket = channel.accept();
+                    if(acceptedSocket == null) {
+                        System.out.println("break");
+                        break;
+                    }
+                    System.out.println("worker system");
+                    NioServerWorker worker = NioServerWorkerFactory.next();
+                    worker.register(acceptedSocket, null);
+                }
+
+            } catch (CancelledKeyException e) {
+                k.cancel();
+                channel.close();
+            }
         }
     }
 
@@ -99,7 +89,6 @@ public final class NioServerBoss extends AbstractNioSelector implements Boss{
             ssc.configureBlocking(false);
             ssc.socket().bind(inetSocketAddress);
             ssc.register(this.selector, SelectionKey.OP_ACCEPT);
-            new Thread(this).start();
         } catch (IOException e) {
             e.printStackTrace();
         }

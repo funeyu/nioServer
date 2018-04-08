@@ -52,6 +52,7 @@ public class NioServerWorker extends AbstractNioWorker{
         try {
             System.out.println("task");
             ((SocketChannel)channel).register(selector, SelectionKey.OP_READ);
+            System.out.println("socketChannel");
             new Thread(this).start();
         } catch (ClosedChannelException e) {
             e.printStackTrace();
