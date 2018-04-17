@@ -39,7 +39,7 @@ public abstract class AbstractNioSelector implements NioSelector {
         Selector selector = this.selector;
 
         if(selector != null) {
-//            selector.wakeup();
+            //selector.wakeup();
         } else {
             if(taskQueue.remove(task)) {
                 throw new RejectedExecutionException("worker has already been shutdown!");
@@ -67,14 +67,14 @@ public abstract class AbstractNioSelector implements NioSelector {
     public void run() {
         for(;;) {
             try {
-                int i = this.selector.select();
+                int i = selector.select();
                 if(i == 0) {
                     // 这里出现了epoll空转的bug
                     continue;
                 }
 
                 processTaskQueue();
-                process(this.selector);
+                process(selector);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -94,7 +94,6 @@ public abstract class AbstractNioSelector implements NioSelector {
     private void openSelector() {
         try {
             selector = Selector.open();
-//            new Thread(this).start();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -54,7 +54,7 @@ public final class NioServerBoss extends AbstractNioSelector implements Boss{
 
             ServerSocketChannel channel = (ServerSocketChannel) k.channel();
 
-            register(channel, null);
+//            register(channel, null);
             try {
                 for(;;) {
                     SocketChannel acceptedSocket = channel.accept();
