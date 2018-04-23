@@ -1,8 +1,9 @@
 package com.fuheryu.futty;
 
+import com.fuheryu.futty.future.ChannelFuture;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
 import java.nio.channels.*;
 import java.util.Iterator;
 import java.util.Set;
@@ -14,7 +15,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public final class NioServerBoss extends AbstractNioSelector implements Boss{
 
-    NioServerBoss(Executor bossExecutor) {super(bossExecutor);}
+    private ChannelPipeLine channelPipeLine;
+
+    NioServerBoss(Executor bossExecutor, ChannelPipeLine channelPipeLine) {
+        super(bossExecutor);
+        this.channelPipeLine = channelPipeLine;
+    }
 
     private final AtomicBoolean isFirstStarted = new AtomicBoolean(true);
 
@@ -64,6 +70,7 @@ public final class NioServerBoss extends AbstractNioSelector implements Boss{
                     }
                     System.out.println("worker system");
                     NioServerWorker worker = NioServerWorkerFactory.next();
+                    worker.setChannelPipeLine(channelPipeLine);
                     worker.register(acceptedSocket, null);
                 }
 

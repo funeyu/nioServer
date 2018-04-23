@@ -1,5 +1,7 @@
 package com.fuheryu.futty;
 
+import com.fuheryu.futty.event.MessageEvent;
+
 import java.nio.channels.SocketChannel;
 
 public abstract class AbstractChannelHandler implements ChannelHandler{
@@ -10,8 +12,4 @@ public abstract class AbstractChannelHandler implements ChannelHandler{
 
     public abstract void connected(SocketChannel socketChannel);
 
-    @Override
-    public void onHandle() {
-
-    }
 }

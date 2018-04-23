@@ -1,7 +1,8 @@
 package com.fuheryu.futty;
 
+import com.fuheryu.futty.future.ChannelFuture;
+
 import java.nio.channels.Channel;
-import java.nio.channels.SocketChannel;
 
 public interface NioSelector extends Runnable{
 

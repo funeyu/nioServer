@@ -66,7 +66,7 @@ public abstract class AbstractNioWorker extends AbstractNioSelector implements W
                     }
                 }
                 if((readyOps & SelectionKey.OP_WRITE) != 0) {
-
+                    writeFromSelectorLoop(k);
                 }
             } catch (CancelledKeyException e) {
                 close(k);

@@ -1,4 +1,4 @@
-package com.fuheryu.futty;
+package com.fuheryu.futty.future;
 
 public interface ChannelFuture {
 }

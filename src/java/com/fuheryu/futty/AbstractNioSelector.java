@@ -1,15 +1,12 @@
 package com.fuheryu.futty;
 
-import com.sun.org.apache.bcel.internal.generic.Select;
+import com.fuheryu.futty.future.ChannelFuture;
 
-import java.io.IOError;
 import java.io.IOException;
 import java.nio.channels.Channel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
-import java.nio.channels.SocketChannel;
 import java.util.Queue;
-import java.util.Set;
 import java.util.concurrent.*;
 
 public abstract class AbstractNioSelector implements NioSelector {

@@ -1,40 +1,46 @@
 package com.fuheryu.futty;
 
-import io.netty.channel.ServerChannel;
+import com.fuheryu.futty.future.ChannelFuture;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channel;
-import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.Executor;
 
 public class NioServerWorker extends AbstractNioWorker{
 
+    private ChannelPipeLine channelPipeLine;
     NioServerWorker(Executor executor) {
+
         super(executor);
+    }
+
+    public void setChannelPipeLine(ChannelPipeLine channelPipeLine) {
+        this.channelPipeLine = channelPipeLine;
     }
 
     @Override
     protected boolean read(SelectionKey k) {
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         if(k.isReadable()) {
-            System.out.println("readddd");
-
             SocketChannel sc = (SocketChannel) k.channel();
             int count;
             try {
                 while((count = sc.read(buffer)) > 0) {
-
+                    buffer.flip();
+                    byte[] bytes = new byte[buffer.limit()];
+                    buffer.get(bytes);
+                    System.out.println("readdd:" + new String(bytes));
                 }
 
                 if(count < 0) { // 这里是客户端主动关闭channel
                     sc.close();
+                    return false;
                 }
+
+                channelPipeLine.handle(sc);
             } catch (IOException e) {
 
             }
